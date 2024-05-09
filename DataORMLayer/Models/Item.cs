@@ -1,11 +1,13 @@
 ﻿using DataORMLayer.Models.CustomDataFields;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataORMLayer.Models;
 
 public class Item
 {
     public Guid ItemId { get; set; }
-    public string Title { get; set; }
+    [Required]
+    public string Name { get; set; }
     public Guid CollectionId { get; set; }
 
     public Collection Collection { get; set; }

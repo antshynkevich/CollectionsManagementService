@@ -3,9 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollectionsManagementService", "CollectionsManagementService\CollectionsManagementService.csproj", "{9B127EFE-AED4-46E9-9B5D-937F963D1B3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollectionsManagementService", "CollectionsManagementService\CollectionsManagementService.csproj", "{9B127EFE-AED4-46E9-9B5D-937F963D1B3D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{24761406-14DD-442B-A758-2665969571F9} = {24761406-14DD-442B-A758-2665969571F9}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataORMLayer", "DataORMLayer\DataORMLayer.csproj", "{24761406-14DD-442B-A758-2665969571F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataORMLayer", "DataORMLayer\DataORMLayer.csproj", "{24761406-14DD-442B-A758-2665969571F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
