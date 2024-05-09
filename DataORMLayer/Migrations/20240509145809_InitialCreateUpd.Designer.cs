@@ -4,6 +4,7 @@ using DataORMLayer.EfCoreCode;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataORMLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240509145809_InitialCreateUpd")]
+    partial class InitialCreateUpd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,23 +40,6 @@ namespace DataORMLayer.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 1,
-                            Name = "Movies"
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            Name = "Books"
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            Name = "Clothes"
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Collection", b =>
@@ -78,22 +64,6 @@ namespace DataORMLayer.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Collections");
-
-                    b.HasData(
-                        new
-                        {
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            CategoryId = 1,
-                            Description = "The description of the \"IMDb top 10 movies\" collection",
-                            Name = "IMDb top 10 movies"
-                        },
-                        new
-                        {
-                            CollectionId = new Guid("6496dc63-74c0-433e-a2b7-df2404f7f8ae"),
-                            CategoryId = 2,
-                            Description = "A Torah, a Bible, and a Qur’an",
-                            Name = "Art of Three Faiths"
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CollectionField", b =>
@@ -118,36 +88,6 @@ namespace DataORMLayer.Migrations
                     b.HasIndex("CollectionId");
 
                     b.ToTable("CollectionFields");
-
-                    b.HasData(
-                        new
-                        {
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            FieldName = "Movie Title",
-                            FieldType = "String"
-                        },
-                        new
-                        {
-                            CollectionFieldId = new Guid("4a30c9d8-95d9-4534-84e1-ea700460b502"),
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            FieldName = "IMDb Score",
-                            FieldType = "Integer"
-                        },
-                        new
-                        {
-                            CollectionFieldId = new Guid("3aca56b2-49de-4597-b9ed-8a860291aaab"),
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            FieldName = "Relise date",
-                            FieldType = "Date"
-                        },
-                        new
-                        {
-                            CollectionFieldId = new Guid("950c8fb5-dc40-4adf-bc87-478ddd52cca3"),
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            FieldName = "Move plot",
-                            FieldType = "Text"
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.BooleanField", b =>
@@ -196,29 +136,6 @@ namespace DataORMLayer.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("DateFields");
-
-                    b.HasData(
-                        new
-                        {
-                            DateFieldId = new Guid("9a69dbee-de41-4d67-88b9-d7cb54903d35"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("10f44355-2de2-422c-b8e5-196cb1cc7da7"),
-                            Value = new DateTime(1994, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            DateFieldId = new Guid("7e010e81-bc2a-4b43-a55b-ea13f44ca455"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("f9029210-cd7a-4884-b2ce-3705317a9af3"),
-                            Value = new DateTime(1972, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            DateFieldId = new Guid("83fd153d-35ce-49bc-955b-ca3e7eacf7dc"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("3cb2814e-768f-487e-bb15-f19752b8bb56"),
-                            Value = new DateTime(2008, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.IntegerField", b =>
@@ -243,29 +160,6 @@ namespace DataORMLayer.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("IntegerFields");
-
-                    b.HasData(
-                        new
-                        {
-                            IntegerFieldId = new Guid("1188a3be-8e36-45b6-8515-6d57231699d0"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("10f44355-2de2-422c-b8e5-196cb1cc7da7"),
-                            Value = 93
-                        },
-                        new
-                        {
-                            IntegerFieldId = new Guid("1cfd8e0a-bf02-4f5e-b616-d44f8c251771"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("f9029210-cd7a-4884-b2ce-3705317a9af3"),
-                            Value = 92
-                        },
-                        new
-                        {
-                            IntegerFieldId = new Guid("2129fc60-da9a-4576-a34a-d64f7b1d6150"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("3cb2814e-768f-487e-bb15-f19752b8bb56"),
-                            Value = 90
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.StringField", b =>
@@ -292,29 +186,6 @@ namespace DataORMLayer.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("StringFields");
-
-                    b.HasData(
-                        new
-                        {
-                            StringFieldId = new Guid("029295fc-76df-4cf3-afa9-71ed38e79a4c"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("10f44355-2de2-422c-b8e5-196cb1cc7da7"),
-                            Value = "The Shawshank Redemption"
-                        },
-                        new
-                        {
-                            StringFieldId = new Guid("721f3c36-b04f-4b86-b599-3cea3430ff1d"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("f9029210-cd7a-4884-b2ce-3705317a9af3"),
-                            Value = "The Godfather"
-                        },
-                        new
-                        {
-                            StringFieldId = new Guid("69f196ac-6b62-470e-90b8-3190a0299fbc"),
-                            CollectionFieldId = new Guid("5b0a1dd9-451b-47a7-9f2e-f8e785aa6916"),
-                            ItemId = new Guid("3cb2814e-768f-487e-bb15-f19752b8bb56"),
-                            Value = "The Dark Knight"
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.TextField", b =>
@@ -341,29 +212,6 @@ namespace DataORMLayer.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("TextFields");
-
-                    b.HasData(
-                        new
-                        {
-                            TextFieldId = new Guid("501d33fc-6732-4e22-bd4a-a916979da374"),
-                            CollectionFieldId = new Guid("950c8fb5-dc40-4adf-bc87-478ddd52cca3"),
-                            ItemId = new Guid("10f44355-2de2-422c-b8e5-196cb1cc7da7"),
-                            Value = "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion."
-                        },
-                        new
-                        {
-                            TextFieldId = new Guid("27fdafd5-67d6-4f3a-bd94-9f695728ad28"),
-                            CollectionFieldId = new Guid("950c8fb5-dc40-4adf-bc87-478ddd52cca3"),
-                            ItemId = new Guid("f9029210-cd7a-4884-b2ce-3705317a9af3"),
-                            Value = "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son."
-                        },
-                        new
-                        {
-                            TextFieldId = new Guid("581c5bbf-f961-4074-a037-09b6f6efe434"),
-                            CollectionFieldId = new Guid("950c8fb5-dc40-4adf-bc87-478ddd52cca3"),
-                            ItemId = new Guid("3cb2814e-768f-487e-bb15-f19752b8bb56"),
-                            Value = "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice."
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Item", b =>
@@ -384,26 +232,6 @@ namespace DataORMLayer.Migrations
                     b.HasIndex("CollectionId");
 
                     b.ToTable("Items");
-
-                    b.HasData(
-                        new
-                        {
-                            ItemId = new Guid("10f44355-2de2-422c-b8e5-196cb1cc7da7"),
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            Name = "First position"
-                        },
-                        new
-                        {
-                            ItemId = new Guid("f9029210-cd7a-4884-b2ce-3705317a9af3"),
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            Name = "Second position"
-                        },
-                        new
-                        {
-                            ItemId = new Guid("3cb2814e-768f-487e-bb15-f19752b8bb56"),
-                            CollectionId = new Guid("b517042e-3623-4c6f-8364-1c34086d6ee0"),
-                            Name = "3rd position"
-                        });
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Tag", b =>
