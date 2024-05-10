@@ -1,0 +1,34 @@
+﻿@model CollectionsManagementService.VievModels.CreateCollectionViewModel
+
+<form method="post">
+    <div class="col-5">
+        <div class="form-group">
+            <label asp-for="Name">Collection name:</label>
+            <input class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Collection description:</label>
+            <input class="form-control" asp-for="Description" />
+            <span asp-validation-for="Description"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoryId">Category:</label>
+            <input class="form-control" asp-for="CategoryId" />
+            <span asp-validation-for="CategoryId"></span>
+        </div>
+   
+        <div class="form-control">
+            @for (var i = 0; i < Model.CollectionFields.Length; i++)
+            {
+                <div class="form-group">
+                    <input class="form-check-input" asp-for="CollectionFields[i].IsFieldNeeded" />
+                    <label asp-for="CollectionFields[i].Name">@Model.CollectionFields[i].FieldType Field @i:</label>
+                    <input class="form-control" asp-for="CollectionFields[i].Name" />
+                    <span asp-validation-for="CollectionFields[i].Name"></span>
+                </div>
+            }
+        </div>
+    </div>
+    <button class="btn btn-outline-success" type="submit">Create Collection</button>
+</form>
