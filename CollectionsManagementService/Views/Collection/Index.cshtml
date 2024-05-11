@@ -1,0 +1,34 @@
+﻿@model List<DataORMLayer.Models.Collection>
+
+<div>
+    @foreach (var collection in Model)
+    {
+        <div>
+            CollectionId = @collection.CollectionId
+        </div>
+        <div>
+            Name = @collection.Name
+        </div>
+        <div>
+            CategoryId = @collection.CategoryId
+        </div>
+        <div>
+            Category.Name = @collection.Category.Name
+        </div>
+        <div>
+            Description = @collection.Description
+        </div>
+        foreach (var collectionField in collection.CollectionFields)
+        {
+            <div>
+                CollectionFieldId = @collectionField.CollectionFieldId
+            </div>
+            <div>
+                FieldName = @collectionField.FieldName
+            </div>
+            <div>
+                FieldType = @collectionField.FieldType
+            </div>
+        }
+    }
+</div>

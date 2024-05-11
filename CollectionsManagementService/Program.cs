@@ -1,4 +1,6 @@
 using DataORMLayer.EfCoreCode;
+using DataORMLayer.Repository;
+using DataORMLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IRepository<Collection>, CollectionRepository>();
 
 var app = builder.Build();
 

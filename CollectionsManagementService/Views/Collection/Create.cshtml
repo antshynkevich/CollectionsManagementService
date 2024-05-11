@@ -26,6 +26,7 @@
                     <label asp-for="CollectionFields[i].Name">@Model.CollectionFields[i].FieldType Field @i:</label>
                     <input class="form-control" asp-for="CollectionFields[i].Name" />
                     <span asp-validation-for="CollectionFields[i].Name"></span>
+                    <input type="hidden" asp-for="CollectionFields[i].FieldType" />
                 </div>
             }
         </div>
