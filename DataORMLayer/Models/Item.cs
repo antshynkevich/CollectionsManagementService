@@ -7,6 +7,7 @@ public class Item
 {
     public Guid ItemId { get; set; }
     [Required]
+    [MaxLength(64)]
     public string Name { get; set; }
     public Guid CollectionId { get; set; }
 
