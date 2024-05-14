@@ -4,5 +4,5 @@ namespace DataORMLayer.Models;
 
 public class ApplicationUser : IdentityUser 
 {
-    //public ICollection<Collection> Collections { get; set; }
+    public ICollection<Collection> Collections { get; set; }
 }

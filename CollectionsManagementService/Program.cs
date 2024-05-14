@@ -2,6 +2,7 @@ using DataORMLayer.EfCoreCode;
 using DataORMLayer.Repository;
 using DataORMLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 builder.Services.AddScoped<IRepository<Collection>, CollectionRepository>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = (UserManager<ApplicationUser>)scope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>));
+    await ApplicationDbInitializer.SeedUsers(userManager);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

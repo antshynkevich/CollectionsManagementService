@@ -2,36 +2,38 @@
 using DataORMLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DataORMLayer.EfCoreCode;
 
 public static class ApplicationDbInitializer
 {
-    //private static readonly string _userId = Guid.NewGuid().ToString();
+    private static readonly string _userId = "7D9B7113-A8F8-4035-99A7-A20DD400F6A3";
 
-    //public static void SeedUsers(UserManager<IdentityUser> userManager)
-    //{
-    //    var seedEmail = "admin@example.com";
+    public static async Task SeedUsers(UserManager<ApplicationUser> userManager)
+    {
+        if (userManager.FindByIdAsync(_userId).Result != null)
+            return;
 
-    //    if (userManager.FindByEmailAsync(seedEmail).Result == null)
-    //    {
-    //        var user = new IdentityUser
-    //        {
-    //            Id = _userId,
-    //            UserName = seedEmail,
-    //            Email = seedEmail
-    //        };
+        var seedEmail = "admin@security.com";
+        var seedPassword = "ABC3_xyz!com";
 
-    //        IdentityResult result = userManager.CreateAsync(user, "ABC3_xyz!com").Result;
+        if (userManager.FindByEmailAsync(seedEmail).Result == null)
+        {
+            var user = new ApplicationUser
+            {
+                Id = _userId,
+                UserName = seedEmail,
+                Email = seedEmail,
+                NormalizedEmail = seedEmail.ToUpper(),
+                NormalizedUserName = seedEmail.ToUpper()
+            };
 
-    //        if (result.Succeeded)
-    //        {
-    //            userManager.AddToRoleAsync(user, "Admin").Wait();
-    //        }
-    //    }
-
-        
-    //}
+            await userManager.CreateAsync(user, seedPassword);
+            var adminClaim = new Claim("UserIsAdminRequired", "Admin", ClaimValueTypes.Boolean);
+            await userManager.AddClaimAsync(user, adminClaim);
+        }
+    }
 
     public static void SeedData(ModelBuilder modelBuilder)
     {
@@ -56,7 +58,7 @@ public static class ApplicationDbInitializer
                 Name = "IMDb top 10 movies",
                 CategoryId = 1,
                 Description = "The description of the \"IMDb top 10 movies\" collection",
-                //UserId = _userId
+                UserId = _userId
             },
             new Collection
             {
@@ -64,7 +66,7 @@ public static class ApplicationDbInitializer
                 Name = "Art of Three Faiths",
                 CategoryId = 2,
                 Description = "A Torah, a Bible, and a Qur’an",
-                //UserId = _userId
+                UserId = _userId
             }
         );
 

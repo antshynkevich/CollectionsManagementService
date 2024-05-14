@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataORMLayer.Models;
 
@@ -11,8 +12,11 @@ public class Collection
     public int CategoryId { get; set; }
     [MaxLength(512)]
     public string Description { get; set; }
+    public string UserId { get; set; }
 
     public Category Category { get; set; }
     public ICollection<Item> Items { get; set; }
     public ICollection<CollectionField> CollectionFields { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public ApplicationUser ApplicationUser { get; set; }
 }
