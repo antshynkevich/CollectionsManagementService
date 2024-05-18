@@ -13,7 +13,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Collection> Collections { get; set; }
     public DbSet<CollectionField> CollectionFields { get; set; }
     public DbSet<Item> Items { get; set; }
-    public DbSet<ApplicationUser> AppUsers { get; set; }
+    public DbSet<Category> Categories { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

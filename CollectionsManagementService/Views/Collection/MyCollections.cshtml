@@ -1,0 +1,40 @@
+﻿@using CollectionsManagementService.VievModels
+@model List<UserCollectionViewModel>
+@{
+    ViewData["Title"] = "Your collections";
+    Layout = "_Layout";
+}
+
+<div>
+    <a class="btn btn-outline-info" asp-controller="Collection" asp-action="CreateCollection">Create new collection</a>
+</div>
+<h1>Your table collection</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <td>Collection category</td>
+            <td>Your collection</td>
+            <td>Collection</td>
+            <td>The custom fields of the collection</td>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@Model[i].CategoryName</td>
+                <td>@Model[i].CollectionName</td>
+                <td>@Model[i].Description</td>
+                <td>
+                    @for (int l = 0; l < @Model[i].CustomCollectionFields.Count; l++)
+                    {
+                        <p>
+                            @Model[i].CustomCollectionFields[l].FildTypeName -
+                            @Model[i].CustomCollectionFields[l].FieldName
+                        </p>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

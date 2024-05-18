@@ -1,43 +1,27 @@
 ﻿using DataORMLayer.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CollectionsManagementService.VievModels;
 
 public class CreateCollectionViewModel
 {
-    public CreateCollectionViewModel()
+    private static readonly int typesOfCustomFields = 5;
+    private static readonly int oneTypeCustomFields = 3;
+
+    public CreateCollectionViewModel() { }
+
+    public CreateCollectionViewModel(List<Category> categories)
     {
+        Categories = categories.Select(cat => new SelectListItem { Value = cat.CategoryId.ToString(), Text = cat.Name });
         ConfigureCollectionFields();
     }
 
     public CreateCollectionFieldViewModel[] CollectionFields { get; set; } 
-        = new CreateCollectionFieldViewModel[3 * 5];
+        = new CreateCollectionFieldViewModel[oneTypeCustomFields * typesOfCustomFields];
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public int CategoryId { get; set; }
-
-    public Collection MapToCollection()
-    {
-        var collectionId = Guid.NewGuid();
-        var collectionFields = CollectionFields
-            .Where(f => f.IsFieldNeeded)
-            .Select(f => new CollectionField
-            {
-                CollectionFieldId = Guid.NewGuid(),
-                CollectionId = collectionId,
-                FieldName = f.Name,
-                FieldType = f.FieldType
-            }).ToArray();
-        var collection = new Collection()
-        {
-            CollectionId = collectionId,
-            Name = this.Name,
-            Description = this.Description,
-            CategoryId = this.CategoryId,
-            CollectionFields = collectionFields
-        };
-
-        return collection;
-    }
+    public string CategoryId { get; set; } = string.Empty;
+    public IEnumerable<SelectListItem> Categories { get; set; } = [];
 
     private void ConfigureCollectionFields()
     {
@@ -57,9 +41,8 @@ public class CreateCollectionViewModel
     }
 }
 
-public class CreateCollectionFieldViewModel
+public class CreateCollectionFieldViewModel : CollectionFieldViewModel
 {
     public FieldType FieldType { get; set; }
-    public string Name { get; set; }
     public bool IsFieldNeeded { get; set; }
 }

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace DataORMLayer.Repository;
 
-public class CollectionRepository : IRepository<Collection>
+public class CollectionRepository : ICollectionRepository
 {
     private readonly AppDbContext _context;
 
@@ -25,10 +25,20 @@ public class CollectionRepository : IRepository<Collection>
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<Collection>> GetAllAsync()
+    public async Task<List<Collection>> GetAllAsync()
     {
         return await _context.Collections
             .AsNoTracking()
+            .Include(c => c.Category)
+            .Include(c => c.CollectionFields)
+            .ToListAsync();
+    }
+
+    public async Task<List<Collection>> GetCollectionsByUserIdAsync(string id)
+    {
+        return await _context.Collections
+            .AsNoTracking()
+            .Where(c => c.UserId == id)
             .Include(c => c.Category)
             .Include(c => c.CollectionFields)
             .ToListAsync();
