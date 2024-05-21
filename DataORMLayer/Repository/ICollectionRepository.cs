@@ -12,4 +12,5 @@ public interface ICollectionRepository
     Task AddAsync(Collection collection);
     Collection Get(Expression<Func<Collection, bool>> filter);
     Task UpdateCollectionAsync(Collection collection);
+    Task DeleteCollectionAsync(Guid collectionId);
 }

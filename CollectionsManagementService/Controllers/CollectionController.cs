@@ -92,10 +92,27 @@ public class CollectionController : Controller
     }
 
     [HttpPost("/[controller]/update/{collectionId}")]
-    public async Task<IActionResult> UpdateCollectionAsync(UpdateCollectionViewModel collectionViewModel)
+    public async Task<IActionResult> UpdateCollection(UpdateCollectionViewModel collectionViewModel)
     {
         var collectionUpdated = _modelMapper.MapToCollection(collectionViewModel);
         await _collectionRepository.UpdateCollectionAsync(collectionUpdated);
         return RedirectToAction(nameof(GetCollection), new { collectionId = collectionViewModel.CollectionId });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DeleteCollection(string collectionId)
+    {
+        await Console.Out.WriteLineAsync("collectionId = " + collectionId);
+        try
+        {
+            await _collectionRepository.DeleteCollectionAsync(Guid.Parse(collectionId));
+        }
+        catch (Exception)
+        {
+            return NotFound();
+            //TODO: throw not found
+        }
+
+        return RedirectToAction(nameof(ShowUserCollections));
     }
 }
