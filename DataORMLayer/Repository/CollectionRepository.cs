@@ -95,4 +95,13 @@ public class CollectionRepository : ICollectionRepository
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteCollectionAsync(Guid collectionId)
+    {
+        var collection = _context.Collections.FirstOrDefault(x => x.CollectionId == collectionId);
+        if (collection == null)
+            throw new ArgumentException("The collection was not found by Id", nameof(collectionId));
+        _context.Collections.Remove(collection);
+        await _context.SaveChangesAsync();
+    }
 }
