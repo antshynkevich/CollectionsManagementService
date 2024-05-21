@@ -70,35 +70,35 @@ public static class ApplicationDbInitializer
             }
         );
 
-        var collectonFieldId1 = Guid.NewGuid();
-        var collectonFieldId2 = Guid.NewGuid();
-        var collectonFieldId3 = Guid.NewGuid();
-        var collectonFieldId4 = Guid.NewGuid();
+        var stringFieldId = Guid.NewGuid();
+        var intFieldId = Guid.NewGuid();
+        var dateFieldId = Guid.NewGuid();
+        var textFieldId = Guid.NewGuid();
         modelBuilder.Entity<CollectionField>().HasData(
             new CollectionField
             {
-                CollectionFieldId = collectonFieldId1,
+                CollectionFieldId = stringFieldId,
                 CollectionId = collectonId1,
                 FieldName = "Movie Title",
                 FieldType = FieldType.String,
             },
             new CollectionField
             {
-                CollectionFieldId = collectonFieldId2,
+                CollectionFieldId = intFieldId,
                 CollectionId = collectonId1,
                 FieldName = "IMDb Score",
                 FieldType = FieldType.Integer,
             },
             new CollectionField
             {
-                CollectionFieldId = collectonFieldId3,
+                CollectionFieldId = dateFieldId,
                 CollectionId = collectonId1,
                 FieldName = "Relise date",
                 FieldType = FieldType.Date,
             },
             new CollectionField
             {
-                CollectionFieldId = collectonFieldId4,
+                CollectionFieldId = textFieldId,
                 CollectionId = collectonId1,
                 FieldName = "Move plot",
                 FieldType = FieldType.Text,
@@ -138,21 +138,21 @@ public static class ApplicationDbInitializer
                 StringFieldId = StringFieldId1,
                 ItemId = itemId1,
                 Value = "The Shawshank Redemption",
-                CollectionFieldId = collectonFieldId1
+                CollectionFieldId = stringFieldId
             },
             new StringField
             {
                 StringFieldId = StringFieldId2,
                 ItemId = itemId2,
                 Value = "The Godfather",
-                CollectionFieldId = collectonFieldId1
+                CollectionFieldId = stringFieldId
             },
             new StringField
             {
                 StringFieldId = StringFieldId3,
                 ItemId = itemId3,
                 Value = "The Dark Knight",
-                CollectionFieldId = collectonFieldId1
+                CollectionFieldId = stringFieldId
             }
         );
 
@@ -165,21 +165,21 @@ public static class ApplicationDbInitializer
                 IntegerFieldId = IntegerFieldId1,
                 ItemId = itemId1,
                 Value = 93,
-                CollectionFieldId = collectonFieldId1
+                CollectionFieldId = intFieldId
             },
             new IntegerField
             {
                 IntegerFieldId = IntegerFieldId2,
                 ItemId = itemId2,
                 Value = 92,
-                CollectionFieldId = collectonFieldId1
+                CollectionFieldId = intFieldId
             },
             new IntegerField
             {
                 IntegerFieldId = IntegerFieldId3,
                 ItemId = itemId3,
                 Value = 90,
-                CollectionFieldId = collectonFieldId1
+                CollectionFieldId = intFieldId
             }
         );
 
@@ -191,22 +191,22 @@ public static class ApplicationDbInitializer
             {
                 DateFieldId = DateFieldId1,
                 ItemId = itemId1,
-                Value = new DateTime(1994, 1, 1),
-                CollectionFieldId = collectonFieldId1
+                Value = new DateOnly(1994, 1, 1),
+                CollectionFieldId = dateFieldId
             },
             new DateField
             {
                 DateFieldId = DateFieldId2,
                 ItemId = itemId2,
-                Value = new DateTime(1972, 1, 1),
-                CollectionFieldId = collectonFieldId1
+                Value = new DateOnly(1972, 1, 1),
+                CollectionFieldId = dateFieldId
             },
             new DateField
             {
                 DateFieldId = DateFieldId3,
                 ItemId = itemId3,
-                Value = new DateTime(2008, 1, 1),
-                CollectionFieldId = collectonFieldId1
+                Value = new DateOnly(2008, 1, 1),
+                CollectionFieldId = dateFieldId
             }
         );
 
@@ -220,7 +220,7 @@ public static class ApplicationDbInitializer
                 ItemId = itemId1,
                 Value = "Over the course of several years, two convicts form a friendship, " +
                 "seeking consolation and, eventually, redemption through basic compassion.",
-                CollectionFieldId = collectonFieldId4
+                CollectionFieldId = textFieldId
             },
             new TextField
             {
@@ -228,7 +228,7 @@ public static class ApplicationDbInitializer
                 ItemId = itemId2,
                 Value = "The aging patriarch of an organized crime dynasty transfers " +
                 "control of his clandestine empire to his reluctant son.",
-                CollectionFieldId = collectonFieldId4
+                CollectionFieldId = textFieldId
             },
             new TextField
             {
@@ -236,7 +236,7 @@ public static class ApplicationDbInitializer
                 ItemId = itemId3,
                 Value = "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, " +
                 "Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-                CollectionFieldId = collectonFieldId4
+                CollectionFieldId = textFieldId
             }
         );
     }

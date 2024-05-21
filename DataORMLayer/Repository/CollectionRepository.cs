@@ -34,6 +34,15 @@ public class CollectionRepository : ICollectionRepository
             .ToListAsync();
     }
 
+    public async Task<Collection?> GetCollectionByIdAsync(Guid collectionId)
+    {
+        return await _context.Collections
+            .AsNoTracking()
+            .Include(c => c.CollectionFields)
+            .Include(c => c.Category)
+            .FirstOrDefaultAsync(c => c.CollectionId == collectionId);
+    }
+
     public async Task<List<Collection>> GetCollectionsByUserIdAsync(string id)
     {
         return await _context.Collections
@@ -42,5 +51,48 @@ public class CollectionRepository : ICollectionRepository
             .Include(c => c.Category)
             .Include(c => c.CollectionFields)
             .ToListAsync();
+    }
+
+    public async Task<Collection?> GetWithItemsByIdAsync(Guid collectionId)
+    {
+        var collection = await _context.Collections
+            .AsNoTracking()
+            .Include(coll => coll.Items)
+                .ThenInclude(item => item.IntegerFields)
+                .ThenInclude(field => field.CollectionField)
+            .Include(coll => coll.Items)
+                .ThenInclude(item => item.StringFields)
+                .ThenInclude(field => field.CollectionField)
+            .Include(coll => coll.Items)
+                .ThenInclude(item => item.DateFields)
+                .ThenInclude(field => field.CollectionField)
+            .Include(coll => coll.Items)
+                .ThenInclude(item => item.TextFields)
+                .ThenInclude(field => field.CollectionField)
+            .Include(coll => coll.Items)
+                .ThenInclude(item => item.BooleanFields)
+            .Include(coll => coll.CollectionFields)
+            .Include(coll => coll.Category)
+            .Include(coll => coll.ApplicationUser)
+            .FirstOrDefaultAsync(collection => collection.CollectionId == collectionId);
+        return collection;
+    }
+
+    public async Task UpdateCollectionAsync(Collection collection)
+    {
+        var oldCollection = await _context.Collections
+            .Include(coll => coll.CollectionFields)
+            .FirstOrDefaultAsync(x => x.CollectionId == collection.CollectionId);
+        if (oldCollection == null)
+            throw new ArgumentException("The collection was not found by Id", nameof(collection));
+        oldCollection.Name = collection.Name;
+        oldCollection.Description = collection.Description;
+        foreach (var oldField in oldCollection.CollectionFields)
+        {
+            var updatedField = collection.CollectionFields.First(x => x.CollectionFieldId == oldField.CollectionFieldId);
+            oldField.FieldName = updatedField.FieldName;
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

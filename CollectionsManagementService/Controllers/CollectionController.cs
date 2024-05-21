@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CollectionsManagementService.Controllers;
 
 [Authorize]
+[Route("[controller]/[action]")]
 public class CollectionController : Controller
 {
     private readonly ICollectionRepository _collectionRepository;
@@ -27,7 +28,22 @@ public class CollectionController : Controller
         _categoryRepository = categoryRepository;
     }
 
-    [HttpGet("/mycollections")]
+    [HttpGet]
+    public async Task<IActionResult> GetCollection(string collectionId)
+    {
+        await Console.Out.WriteLineAsync($"collection id = {collectionId}");
+        var collection = await _collectionRepository.GetWithItemsByIdAsync(Guid.Parse(collectionId));
+        if (collection == null)
+        {
+            return NotFound();
+            //TODO: throw not found
+        }
+
+        var detailedCollectionVm = _modelMapper.MapToDetailedCollection(collection);
+        return View("DisplayCollection", detailedCollectionVm);
+    }
+
+    [HttpGet("/[controller]/mycollections")]
     public async Task<IActionResult> ShowUserCollections()
     {
         var currentUser = await _userManager.GetUserAsync(User);
@@ -39,12 +55,13 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        //TODO: rewrite or delete this method
         var collectionsWithFields = await _collectionRepository.GetAllAsync();
         return View(collectionsWithFields);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> CreateCollectionAsync()
+    [HttpGet("/[controller]/create")]
+    public async Task<IActionResult> CreateCollection()
     {
         var categories = await _categoryRepository.GetAllCategoriesAsync();
         var viewModel = new CreateCollectionViewModel(categories);
@@ -52,11 +69,33 @@ public class CollectionController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCollectionAsync(CreateCollectionViewModel viewModel)
+    public async Task<IActionResult> CreateCollection(CreateCollectionViewModel viewModel)
     {
         var currentUser = await _userManager.GetUserAsync(User);
         var collection = _modelMapper.MapToCollection(viewModel, currentUser.Id);
         await _collectionRepository.AddAsync(collection);
         return RedirectToAction("Index");
+    }
+
+    [HttpGet("/[controller]/update/{collectionId}")]
+    public async Task<IActionResult> UpdateCollection(string collectionId)
+    {
+        var collection = await _collectionRepository.GetCollectionByIdAsync(Guid.Parse(collectionId));
+        if (collection == null)
+        {
+            return NotFound();
+            //TODO: throw not found
+        }
+
+        var collectoinVM = _modelMapper.MapToUpdateCollectionVM(collection);
+        return View(collectoinVM);
+    }
+
+    [HttpPost("/[controller]/update/{collectionId}")]
+    public async Task<IActionResult> UpdateCollectionAsync(UpdateCollectionViewModel collectionViewModel)
+    {
+        var collectionUpdated = _modelMapper.MapToCollection(collectionViewModel);
+        await _collectionRepository.UpdateCollectionAsync(collectionUpdated);
+        return RedirectToAction(nameof(GetCollection), new { collectionId = collectionViewModel.CollectionId });
     }
 }

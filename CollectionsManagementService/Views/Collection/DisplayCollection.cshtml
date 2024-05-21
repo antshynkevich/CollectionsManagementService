@@ -1,0 +1,82 @@
+﻿@using CollectionsManagementService.VievModels
+@using DataORMLayer.Models
+@model DetailedCollectionViewModel
+
+<h1>The @Model.CollectionName collection</h1>
+<div>@Model.Description</div>
+<div>Category - @Model.CategoryName</div>
+<p>Created by - @Model.UserName</p>
+
+<h3>Custom fields of the @Model.CollectionName collection</h3>
+<div>
+    <table class="table table-light table-bordered border border-1">
+        <tr>
+            <th>Field type label</th>
+            @foreach (var customField in Model.CustomCollectionFields)
+            {
+                <td>@customField.FildTypeName</td>
+            }
+        </tr>
+        <tr>
+            <th>Custom field name</th>
+            @foreach (var customField in Model.CustomCollectionFields)
+            {
+                <td>@customField.FieldName</td>
+            }
+        </tr>
+    </table>
+</div>
+
+<h3>Collection Items</h3>
+<div>
+    <table class="table table-striped border border-1 table-bordered">
+        <thead>
+            <tr>
+                <th>Item #</th>
+                <th>Item Name</th>
+                <th>Lines of the item</th>
+                <th>Numbers of the item</th>
+                <th>Dates of the item</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int index = 1; }
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@item.ItemName</td>
+                    <td>
+                        @foreach (var customField in item.StringFields)
+                        {
+                            <span>
+                                @customField.FieldName - 
+                                @customField.Value
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var customField in item.IntegerFields)
+                        {
+                            <span>
+                                @customField.FieldName -
+                                @customField.Value
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var customField in item.DateFields)
+                        {
+                            <span>
+
+                                @customField.FieldName -
+                                @customField.Value
+                            </span>
+                        }
+                    </td>
+                </tr>
+                index++;
+            }
+        </tbody>
+    </table>
+</div>

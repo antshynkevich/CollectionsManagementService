@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DataORMLayer.Models.CustomDataFields;
 
 [Table("BooleanFields")]
-public class BooleanField
+public class BooleanField : IItemField<bool>
 {
     public Guid BooleanFieldId { get; set; }
     public Guid CollectionFieldId { get; set; }

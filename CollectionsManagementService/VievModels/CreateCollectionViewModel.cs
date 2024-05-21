@@ -16,8 +16,8 @@ public class CreateCollectionViewModel
         ConfigureCollectionFields();
     }
 
-    public CreateCollectionFieldViewModel[] CollectionFields { get; set; } 
-        = new CreateCollectionFieldViewModel[oneTypeCustomFields * typesOfCustomFields];
+    public CollectionFieldViewModel[] CollectionFields { get; set; } 
+        = new CollectionFieldViewModel[oneTypeCustomFields * typesOfCustomFields];
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string CategoryId { get; set; } = string.Empty;
@@ -30,7 +30,7 @@ public class CreateCollectionViewModel
         {
             for (int i = 0; i < 3; i++)
             {
-                CollectionFields[fieldsIndex] = new CreateCollectionFieldViewModel
+                CollectionFields[fieldsIndex] = new CollectionFieldViewModel
                 {
                     FieldType = fieldType
                 };
@@ -39,10 +39,4 @@ public class CreateCollectionViewModel
             }
         }
     }
-}
-
-public class CreateCollectionFieldViewModel : CollectionFieldViewModel
-{
-    public FieldType FieldType { get; set; }
-    public bool IsFieldNeeded { get; set; }
 }

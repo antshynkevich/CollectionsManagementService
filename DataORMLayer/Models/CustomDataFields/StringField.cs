@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DataORMLayer.Models.CustomDataFields;
 
 [Table("StringFields")]
-public class StringField
+public class StringField : IItemField<string>
 {
     public Guid StringFieldId { get; set; }
     public Guid CollectionFieldId { get; set; }

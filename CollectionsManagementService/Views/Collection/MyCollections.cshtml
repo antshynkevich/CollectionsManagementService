@@ -12,27 +12,41 @@
 <table class="table">
     <thead>
         <tr>
-            <td>Collection category</td>
-            <td>Your collection</td>
-            <td>Collection</td>
-            <td>The custom fields of the collection</td>
+            <th>#</th>
+            <th>Collection category</th>
+            <th>Your collection</th>
+            <th>Collection</th>
+            <th>The custom fields of the collection</th>
+            <th>Control</th>
         </tr>
     </thead>
     <tbody>
-        @for (int i = 0; i < Model.Count; i++)
+        @{ int index = 0; }
+        @foreach (var collection in Model)
         {
             <tr>
-                <td>@Model[i].CategoryName</td>
-                <td>@Model[i].CollectionName</td>
-                <td>@Model[i].Description</td>
+                <td>@{ index++; }@index</td>
+                <td>@collection.CategoryName</td>
                 <td>
-                    @for (int l = 0; l < @Model[i].CustomCollectionFields.Count; l++)
+                    <a asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@collection.CollectionId">@collection.CollectionName</a>
+                </td>
+                <td>@collection.Description</td>
+                <td>
+                    @for (int l = 0; l < @collection.CustomCollectionFields.Count; l++)
                     {
                         <p>
-                            @Model[i].CustomCollectionFields[l].FildTypeName -
-                            @Model[i].CustomCollectionFields[l].FieldName
+                            @collection.CustomCollectionFields[l].FildTypeName -
+                            @collection.CustomCollectionFields[l].FieldName
                         </p>
                     }
+                </td>
+                <td>
+                    <a class="btn btn-info" asp-controller="Collection" asp-action="UpdateCollection" asp-route-collectionId="@collection.CollectionId">
+                        Upd
+                    </a>
+                    <a class="btn btn-danger" asp-controller="Collection" asp-action="">
+                        Del add asp-action tag
+                    </a>
                 </td>
             </tr>
         }
