@@ -1,0 +1,56 @@
+﻿@using CollectionsManagementService.VievModels
+@model List<UserCollectionViewModel>
+@{
+    ViewData["Title"] = "Your collections";
+    Layout = "_Layout";
+}
+
+<div>
+    <a class="btn btn-outline-info" asp-controller="Collection" asp-action="CreateCollection">Create new collection</a>
+</div>
+<h1>Your table collection</h1>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Collection category</th>
+            <th>Your collection</th>
+            <th>Collection</th>
+            <th>The custom fields of the collection</th>
+            <th>Control</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int index = 0; }
+        @foreach (var collection in Model)
+        {
+            <tr>
+                <td>@{ index++; }@index</td>
+                <td>@collection.CategoryName</td>
+                <td>
+                    <a asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@collection.CollectionId">@collection.CollectionName</a>
+                </td>
+                <td>@collection.Description</td>
+                <td>
+                    @for (int l = 0; l < @collection.CustomCollectionFields.Count; l++)
+                    {
+                        <p>
+                            @collection.CustomCollectionFields[l].FildTypeName -
+                            @collection.CustomCollectionFields[l].FieldName
+                        </p>
+                    }
+                </td>
+                <td>
+                    <div>
+                        <a class="btn btn-info" asp-controller="Collection" asp-action="UpdateCollection" asp-route-collectionId="@collection.CollectionId">
+                            Upd
+                        </a>
+                        <a class="btn btn-danger" asp-controller="Collection" asp-action="DeleteCollection" asp-route-collectionId="@collection.CollectionId">
+                            Del
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
