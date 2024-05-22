@@ -45,7 +45,11 @@
             {
                 <tr>
                     <td>@index</td>
-                    <td>@item.ItemName</td>
+                    <td>
+                        <a asp-controller="Item" asp-action="Index" asp-route-itemId="@item.ItemId">
+                            @item.ItemName
+                        </a>
+                    </td>
                     <td>
                         @foreach (var customField in item.StringFields)
                         {

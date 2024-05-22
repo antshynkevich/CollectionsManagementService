@@ -1,6 +1,5 @@
 ﻿using CollectionsManagementService.VievModels;
 using DataORMLayer.Models;
-using DataORMLayer.Models.CustomDataFields;
 
 namespace CollectionsManagementService.Services;
 
@@ -106,24 +105,11 @@ public class ModelMapper : IModelMapper
         {
             ItemId = item.ItemId,
             ItemName = item.Name,
-            IntegerFields = item.IntegerFields.Select(MapFieldHelper<int>.MapToItemViewModel).ToList(),
-            BoolFields = item.BooleanFields.Select(MapFieldHelper<bool>.MapToItemViewModel).ToList(),
-            DateFields = item.DateFields.Select(MapFieldHelper<DateOnly>.MapToItemViewModel).ToList(),
-            StringFields = item.StringFields.Select(MapFieldHelper<string>.MapToItemViewModel).ToList(),
-            TextFields = item.TextFields.Select(MapFieldHelper<string>.MapToItemViewModel).ToList(),
+            IntegerFields = item.IntegerFields.Select(MapItemFieldHelper<int>.MapToItemViewModel).ToList(),
+            BoolFields = item.BooleanFields.Select(MapItemFieldHelper<bool>.MapToItemViewModel).ToList(),
+            DateFields = item.DateFields.Select(MapItemFieldHelper<DateOnly>.MapToItemViewModel).ToList(),
+            StringFields = item.StringFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
+            TextFields = item.TextFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
         };
-    }
-
-    internal static class MapFieldHelper<T>
-    {
-        public static ItemFieldViewModel<T> MapToItemViewModel(IItemField<T> field)
-        {
-            return new ItemFieldViewModel<T>
-            {
-                FieldName = field.CollectionField.FieldName,
-                FieldType = field.CollectionField.FieldType.ToString(),
-                Value = field.Value
-            };
-        }
     }
 }

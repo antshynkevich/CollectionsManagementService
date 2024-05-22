@@ -25,8 +25,10 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddScoped<IModelMapper, ModelMapper>();
+builder.Services.AddSingleton<IModelMapper, ModelMapper>();
+builder.Services.AddSingleton<IItemMapper, ItemMapper>();
 builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 
 var app = builder.Build();

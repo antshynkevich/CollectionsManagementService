@@ -1,0 +1,66 @@
+﻿@model CollectionsManagementService.VievModels.DetailedItemViewModel;
+
+<h1>@Model.ItemName Item</h1>
+<h2>The Item from the <a asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@Model.CollectionId">@Model.CollectionName</a> Collection</h2>
+@if (Model.StringFields.Count > 0)
+{
+    <h3>String fields of the item</h3>
+    <div class="col-8">
+        <table class="table table-bordered">
+            @foreach (var stringField in Model.StringFields)
+            {
+                <tr>
+                    <th class="col-2">@stringField.FieldName</th>
+                    <td class="col-6">@stringField.Value</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+<h3>Date, Bool, and Number fields</h3>
+<table class="table table-bordered">
+    <tr>
+        @foreach (var date in Model.DateFields)
+        {
+            <th>@date.FieldName</th>
+        }
+
+        @foreach (var boolean in Model.BoolFields)
+        {
+            <th>@boolean.FieldName</th>
+        }
+
+        @foreach (var integer in Model.IntegerFields)
+        {
+            <th>@integer.FieldName</th>
+        }
+    </tr>
+    <tr>
+        @foreach (var date in Model.DateFields)
+        {
+            <td>@date.Value</td>
+        }
+
+        @foreach (var boolean in Model.BoolFields)
+        {
+            var yesOrNo = boolean.Value == true ? "Yes" : "No";
+            <td>@yesOrNo</td>
+        }
+
+        @foreach (var integer in Model.IntegerFields)
+        {
+            <td>@integer.Value</td>
+        }
+    </tr>
+</table>
+
+<h3>Text fields of the item</h3>
+<div>
+    @foreach (var textField in Model.TextFields)
+    {
+        <div>
+            @textField.Value
+        </div>
+    }
+</div>
