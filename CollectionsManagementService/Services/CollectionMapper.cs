@@ -1,9 +1,10 @@
-﻿using CollectionsManagementService.VievModels;
+﻿using CollectionsManagementService.Services.Interfaces;
+using CollectionsManagementService.VievModels;
 using DataORMLayer.Models;
 
 namespace CollectionsManagementService.Services;
 
-public class ModelMapper : IModelMapper
+public class CollectionMapper : ICollectionMapper
 {
     public Collection MapToCollection(CreateCollectionViewModel collectionVM, string userId)
     {
@@ -22,6 +23,8 @@ public class ModelMapper : IModelMapper
             CollectionId = collectionId,
             Name = collectionVM.Name,
             Description = collectionVM.Description,
+            CreateDate = DateTime.UtcNow,
+            ImageUrl = collectionVM.ImageUrl,
             CategoryId = int.Parse(collectionVM.CategoryId),
             UserId = userId,
             CollectionFields = collectionFields
@@ -32,17 +35,24 @@ public class ModelMapper : IModelMapper
 
     public Collection MapToCollection(UpdateCollectionViewModel collectionVM)
     {
-        return new Collection()
+        var collection = new Collection()
         {
             CollectionId = collectionVM.CollectionId,
             Name = collectionVM.Name,
             Description = collectionVM.Description,
-            CollectionFields = collectionVM.CollectionFields.Select(x => new CollectionField
+            ImageUrl= collectionVM.ImageUrl
+        };
+
+        if (collection.CollectionFields != null)
+        {
+            collection.CollectionFields = collectionVM.CollectionFields.Select(x => new CollectionField
             {
                 CollectionFieldId = x.FieldId,
                 FieldName = x.FieldName
-            }).ToList()
-        };
+            }).ToList();
+        }
+
+        return collection;
     }
 
     public UserCollectionViewModel MapToCollectionViewModel(Collection collection)
@@ -73,7 +83,8 @@ public class ModelMapper : IModelMapper
                 .Select(x => new CollectionFieldViewModel { FieldName = x.FieldName, FieldId = x.CollectionFieldId, FildTypeName = x.FieldType.ToString() }).ToList(),
             Description = collection.Description,
             Name = collection.Name,
-            CategoryId = collection.CategoryId
+            ImageUrl = collection.ImageUrl
+            //CategoryId = collection.CategoryId
         };
     }
 
@@ -90,6 +101,7 @@ public class ModelMapper : IModelMapper
             Description = collection.Description,
             CategoryName = collection.Category.Name,
             UserName = collection.ApplicationUser.UserName,
+            ImageUrl = collection.ImageUrl,
             CustomCollectionFields = collection.CollectionFields
                 .Select(f => new CollectionFieldViewModel { FieldName = f.FieldName, FildTypeName = f.FieldType.ToString() }).ToList(),
             Items = collection.Items

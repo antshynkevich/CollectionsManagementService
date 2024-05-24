@@ -1,4 +1,4 @@
-﻿using CollectionsManagementService.Services;
+﻿using CollectionsManagementService.Services.Interfaces;
 using CollectionsManagementService.VievModels;
 using DataORMLayer.Models;
 using DataORMLayer.Repository;
@@ -15,17 +15,20 @@ public class CollectionController : Controller
     private readonly ICollectionRepository _collectionRepository;
     private readonly CategoryRepository _categoryRepository;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IModelMapper _modelMapper;
+    private readonly ICollectionMapper _collectionMapper;
+    private readonly ICloudService _cloudService;
 
     public CollectionController(ICollectionRepository collectionRepository,
         UserManager<ApplicationUser> userManager,
-        IModelMapper modelMapper,
-        CategoryRepository categoryRepository)
+        ICollectionMapper collectionMapper,
+        CategoryRepository categoryRepository,
+        ICloudService cloudService)
     {
         _collectionRepository = collectionRepository;
         _userManager = userManager;
-        _modelMapper = modelMapper;
+        _collectionMapper = collectionMapper;
         _categoryRepository = categoryRepository;
+        _cloudService = cloudService;
     }
 
     [HttpGet]
@@ -39,7 +42,7 @@ public class CollectionController : Controller
             //TODO: throw not found
         }
 
-        var detailedCollectionVm = _modelMapper.MapToDetailedCollection(collection);
+        var detailedCollectionVm = _collectionMapper.MapToDetailedCollection(collection);
         return View("DisplayCollection", detailedCollectionVm);
     }
 
@@ -48,7 +51,7 @@ public class CollectionController : Controller
     {
         var currentUser = await _userManager.GetUserAsync(User);
         var userCollections = await _collectionRepository.GetCollectionsByUserIdAsync(currentUser.Id);
-        var userCollectionsVM = _modelMapper.MapToCollectionViewModelList(userCollections);
+        var userCollectionsVM = _collectionMapper.MapToCollectionViewModelList(userCollections);
         return View("MyCollections", userCollectionsVM);
     }
 
@@ -60,19 +63,25 @@ public class CollectionController : Controller
         return View(collectionsWithFields);
     }
 
-    [HttpGet("/[controller]/create")]
-    public async Task<IActionResult> CreateCollection()
+    [HttpGet]
+    public async Task<IActionResult> Create()
     {
         var categories = await _categoryRepository.GetAllCategoriesAsync();
         var viewModel = new CreateCollectionViewModel(categories);
-        return View("Create", viewModel);
+        return View(viewModel);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCollection(CreateCollectionViewModel viewModel)
+    public async Task<IActionResult> Create(CreateCollectionViewModel viewModel)
     {
+        if (viewModel.Image != null)
+        {
+            var result = await _cloudService.AddImageAsync(viewModel.Image);
+            viewModel.ImageUrl = result.Url.ToString();
+        }
+
         var currentUser = await _userManager.GetUserAsync(User);
-        var collection = _modelMapper.MapToCollection(viewModel, currentUser.Id);
+        var collection = _collectionMapper.MapToCollection(viewModel, currentUser.Id);
         await _collectionRepository.AddAsync(collection);
         return RedirectToAction("Index");
     }
@@ -87,14 +96,25 @@ public class CollectionController : Controller
             //TODO: throw not found
         }
 
-        var collectoinVM = _modelMapper.MapToUpdateCollectionVM(collection);
+        var collectoinVM = _collectionMapper.MapToUpdateCollectionVM(collection);
         return View(collectoinVM);
     }
 
     [HttpPost("/[controller]/update/{collectionId}")]
     public async Task<IActionResult> UpdateCollection(UpdateCollectionViewModel collectionViewModel)
     {
-        var collectionUpdated = _modelMapper.MapToCollection(collectionViewModel);
+        if (collectionViewModel.Image != null)
+        {
+            if (!string.IsNullOrEmpty(collectionViewModel.ImageUrl))
+            {
+                await _cloudService.DeleteImageAsync(collectionViewModel.ImageUrl);
+            }
+
+            var result = await _cloudService.AddImageAsync(collectionViewModel.Image);
+            collectionViewModel.ImageUrl = result.Url.ToString();
+        }
+
+        var collectionUpdated = _collectionMapper.MapToCollection(collectionViewModel);
         await _collectionRepository.UpdateCollectionAsync(collectionUpdated);
         return RedirectToAction(nameof(GetCollection), new { collectionId = collectionViewModel.CollectionId });
     }
@@ -102,7 +122,6 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> DeleteCollection(string collectionId)
     {
-        await Console.Out.WriteLineAsync("collectionId = " + collectionId);
         try
         {
             await _collectionRepository.DeleteCollectionAsync(Guid.Parse(collectionId));

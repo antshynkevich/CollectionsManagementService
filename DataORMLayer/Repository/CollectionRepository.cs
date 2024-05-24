@@ -87,10 +87,14 @@ public class CollectionRepository : ICollectionRepository
             throw new ArgumentException("The collection was not found by Id", nameof(collection));
         oldCollection.Name = collection.Name;
         oldCollection.Description = collection.Description;
-        foreach (var oldField in oldCollection.CollectionFields)
+        oldCollection.ImageUrl = collection.ImageUrl;
+        if (collection.CollectionFields != null)
         {
-            var updatedField = collection.CollectionFields.First(x => x.CollectionFieldId == oldField.CollectionFieldId);
-            oldField.FieldName = updatedField.FieldName;
+            foreach (var oldField in oldCollection.CollectionFields)
+            {
+                var updatedField = collection.CollectionFields.First(x => x.CollectionFieldId == oldField.CollectionFieldId);
+                oldField.FieldName = updatedField.FieldName;
+            }
         }
 
         await _context.SaveChangesAsync();

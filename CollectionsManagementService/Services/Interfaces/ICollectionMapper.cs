@@ -1,9 +1,9 @@
 ﻿using CollectionsManagementService.VievModels;
 using DataORMLayer.Models;
 
-namespace CollectionsManagementService.Services;
+namespace CollectionsManagementService.Services.Interfaces;
 
-public interface IModelMapper
+public interface ICollectionMapper
 {
     Collection MapToCollection(CreateCollectionViewModel collectionVM, string userId);
     Collection MapToCollection(UpdateCollectionViewModel collectionVM);

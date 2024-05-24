@@ -4,6 +4,8 @@ using DataORMLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using CollectionsManagementService.Services;
+using CollectionsManagementService.Services.Interfaces;
+using CloudinaryDotNet;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,11 +27,15 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddSingleton<IModelMapper, ModelMapper>();
+builder.Services.AddSingleton<ICollectionMapper, CollectionMapper>();
 builder.Services.AddSingleton<IItemMapper, ItemMapper>();
 builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<ICloudService, CloudService>();
 builder.Services.AddScoped<CategoryRepository>();
+
+var cloudinary = new Cloudinary("cloudinary://267417229445433:t2vEgh1RxVe9lqlV7HMqbPmQV1U@dedob71th");
+builder.Services.AddSingleton(cloudinary);
 
 var app = builder.Build();
 

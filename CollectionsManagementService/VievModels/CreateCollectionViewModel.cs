@@ -22,6 +22,8 @@ public class CreateCollectionViewModel
     public string Description { get; set; } = string.Empty;
     public string CategoryId { get; set; } = string.Empty;
     public IEnumerable<SelectListItem> Categories { get; set; } = [];
+    public IFormFile Image { get; set; }
+    public string? ImageUrl { get; set; }
 
     private void ConfigureCollectionFields()
     {

@@ -1,32 +1,62 @@
 ﻿@using CollectionsManagementService.VievModels
 @model UpdateCollectionViewModel
 <h1>Update the @Model.Name collection</h1>
-<p>On this page you can change the name or the description of the collection.<br />You can also change names of the custom fields in your collection.</p>
+<p>On this page you can change the name or the description of the collection.</p>
 
-<form method="post">
-    <div>
-        <div class="form-group">
-            <label asp-for="Name">Change collection name:</label>
-            <input class="form-control" asp-for="Name" />
-            <span asp-validation-for="Name"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description">Change collection description:</label>
-            <input class="form-control" asp-for="Description" />
-            <span asp-validation-for="Description"></span>
-        </div>
-        <input type="hidden" asp-for="CollectionId" />
-        <h3>Update the custom fields of the collection</h3>
-        <div class="form-group">
-            @for (int i = 0, j = 1; i < Model.CollectionFields.Count; i++, j++)
-            {
-                <div class="form-group">
-                    <label asp-for="CollectionFields[i].FieldName">Field #@j @Model.CollectionFields[i].FildTypeName Field:</label>
-                    <input class="form-control" asp-for="CollectionFields[i].FieldName" />
-                    <input type="hidden" asp-for="CollectionFields[i].FieldId" />
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-control">
+                    <div class="my-2">
+                        <label class="form-label" asp-for="Name">Change collection name:</label>
+                        <input class="form-control" asp-for="Name" />
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                    <div class="my-2">
+                        <label class="form-label" asp-for="Description">Change collection description:</label>
+                        <input class="form-control" asp-for="Description" />
+                        <span asp-validation-for="Description"></span>
+                    </div>
+                    <div class="form-control my-3">
+                        @if (Model.ImageUrl != null)
+                        {
+                            <div class="col-3">
+                                <div class="img-thumbnail">
+                                    <img src="@Model.ImageUrl" alt="The image of the @Model.Name collection" class="img-fluid" />
+                                </div>
+                            </div>
+                            <div class="">
+                                <p>You can change the image of your collection.</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="">
+                                <p>There is no an image for your collecion. You can add a new one.<br /></p>
+                            </div>
+                        }
+                        <div class="">
+                            <label class="form-label">Click the button and choose an image for your collection.</label>
+                            <input asp-for="Image" class="form-label" type="file" />
+                        </div>
+                    </div>
+                    <h3>Update the custom fields of the collection</h3>
+                    <p>You can also change names of the custom fields in your collection.</p>
+                    <div class="form-control my-3">
+                        @for (int i = 0, j = 1; i < Model.CollectionFields.Count; i++, j++)
+                        {
+                            <div class="form-group">
+                                <label asp-for="CollectionFields[i].FieldName">Field #@j @Model.CollectionFields[i].FildTypeName Field:</label>
+                                <input class="form-control" asp-for="CollectionFields[i].FieldName" />
+                                <input type="hidden" asp-for="CollectionFields[i].FieldId" />
+                            </div>
+                        }
+                    </div>
                 </div>
-            }
+                <button class="btn btn-outline-success my-2" type="submit">Update Collection</button>
+            </form>
         </div>
     </div>
-    <button class="btn btn-outline-success" type="submit">Update Collection</button>
-</form>
+</div>
+

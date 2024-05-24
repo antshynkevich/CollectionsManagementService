@@ -44,8 +44,10 @@ public static class ApplicationDbInitializer
             new Category { CategoryId = 4, Name = "Games, Toys, and Figures" },
             new Category { CategoryId = 5, Name = "Bills and Coins, Stamps" },
             new Category { CategoryId = 6, Name = "Music Albums, Clips, and Records" },
-            new Category { CategoryId = 7, Name = "Firearms" },
+            new Category { CategoryId = 7, Name = "Product and Service Reviews" },
             new Category { CategoryId = 8, Name = "Cars and Vehicles" },
+            new Category { CategoryId = 9, Name = "Dish Recipes" },
+            new Category { CategoryId = 10, Name = "Firearms" },
             new Category { CategoryId = 99, Name = "Other" }
         );
 
@@ -58,7 +60,8 @@ public static class ApplicationDbInitializer
                 Name = "IMDb top 10 movies",
                 CategoryId = 1,
                 Description = "The description of the \"IMDb top 10 movies\" collection",
-                UserId = _userId
+                UserId = _userId,
+                CreateDate = DateTime.UtcNow
             },
             new Collection
             {
@@ -66,7 +69,8 @@ public static class ApplicationDbInitializer
                 Name = "Art of Three Faiths",
                 CategoryId = 2,
                 Description = "A Torah, a Bible, and a Qur’an",
-                UserId = _userId
+                UserId = _userId,
+                CreateDate = DateTime.UtcNow
             }
         );
 

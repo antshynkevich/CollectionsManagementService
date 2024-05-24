@@ -2,11 +2,24 @@
 @using DataORMLayer.Models
 @model DetailedCollectionViewModel
 
-<h1>The @Model.CollectionName collection</h1>
-<div>@Model.Description</div>
-<div>Category - @Model.CategoryName</div>
-<p>Created by - @Model.UserName</p>
-
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <h1>The @Model.CollectionName collection</h1>
+            <div>@Model.Description</div>
+            <div>Category - @Model.CategoryName</div>
+            <p>Created by - @Model.UserName</p>
+        </div>
+        @if (Model.ImageUrl != null)
+        {
+            <div class="col-3">
+                <div class="img-thumbnail">
+                    <img src="@Model.ImageUrl" alt="The image of the @Model.CollectionName collection" class="img-fluid" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
 <h3>Custom fields of the @Model.CollectionName collection</h3>
 <div>
     <table class="table table-light table-bordered border border-1">

@@ -1,7 +1,7 @@
 ﻿using CollectionsManagementService.VievModels;
 using DataORMLayer.Models;
 
-namespace CollectionsManagementService.Services;
+namespace CollectionsManagementService.Services.Interfaces;
 
 public interface IItemMapper
 {

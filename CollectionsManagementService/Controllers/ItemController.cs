@@ -1,4 +1,4 @@
-﻿using CollectionsManagementService.Services;
+﻿using CollectionsManagementService.Services.Interfaces;
 using DataORMLayer.Repository;
 using Microsoft.AspNetCore.Mvc;
 
