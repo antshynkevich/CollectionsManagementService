@@ -1,5 +1,7 @@
 ﻿using CollectionsManagementService.Services.Interfaces;
 using CollectionsManagementService.VievModels;
+using CollectionsManagementService.VievModels.Collection;
+using CollectionsManagementService.VievModels.Item;
 using DataORMLayer.Models;
 
 namespace CollectionsManagementService.Services;
@@ -102,6 +104,7 @@ public class CollectionMapper : ICollectionMapper
             CategoryName = collection.Category.Name,
             UserName = collection.ApplicationUser.UserName,
             ImageUrl = collection.ImageUrl,
+            CollectionId = collection.CollectionId,
             CustomCollectionFields = collection.CollectionFields
                 .Select(f => new CollectionFieldViewModel { FieldName = f.FieldName, FildTypeName = f.FieldType.ToString() }).ToList(),
             Items = collection.Items

@@ -1,4 +1,4 @@
-﻿namespace CollectionsManagementService.VievModels;
+﻿namespace CollectionsManagementService.VievModels.Item;
 
 public class ItemViewModel
 {
@@ -9,11 +9,4 @@ public class ItemViewModel
     public List<ItemFieldViewModel<DateOnly>> DateFields { get; set; }
     public List<ItemFieldViewModel<bool>> BoolFields { get; set; }
     public List<ItemFieldViewModel<string>> TextFields { get; set; }
-}
-
-public class ItemFieldViewModel<T>
-{
-    public string FieldName { get; set; }
-    public string FieldType { get; set; }
-    public T Value { get; set; }
 }

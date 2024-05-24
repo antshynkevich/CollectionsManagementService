@@ -1,4 +1,6 @@
-﻿namespace CollectionsManagementService.VievModels;
+﻿using CollectionsManagementService.VievModels.Item;
+
+namespace CollectionsManagementService.VievModels.Collection;
 
 public class DetailedCollectionViewModel : UserCollectionViewModel
 {

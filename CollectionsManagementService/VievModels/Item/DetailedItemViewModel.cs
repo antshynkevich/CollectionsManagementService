@@ -1,4 +1,4 @@
-﻿namespace CollectionsManagementService.VievModels;
+﻿namespace CollectionsManagementService.VievModels.Item;
 
 public class DetailedItemViewModel : ItemViewModel
 {

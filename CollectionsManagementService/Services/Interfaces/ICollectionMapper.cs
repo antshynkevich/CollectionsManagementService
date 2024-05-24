@@ -1,4 +1,5 @@
-﻿using CollectionsManagementService.VievModels;
+﻿using CollectionsManagementService.VievModels.Collection;
+using CollectionsManagementService.VievModels.Item;
 using DataORMLayer.Models;
 
 namespace CollectionsManagementService.Services.Interfaces;

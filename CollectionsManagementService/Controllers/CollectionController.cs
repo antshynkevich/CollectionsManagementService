@@ -1,5 +1,5 @@
 ﻿using CollectionsManagementService.Services.Interfaces;
-using CollectionsManagementService.VievModels;
+using CollectionsManagementService.VievModels.Collection;
 using DataORMLayer.Models;
 using DataORMLayer.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -34,7 +34,6 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> GetCollection(string collectionId)
     {
-        await Console.Out.WriteLineAsync($"collection id = {collectionId}");
         var collection = await _collectionRepository.GetWithItemsByIdAsync(Guid.Parse(collectionId));
         if (collection == null)
         {

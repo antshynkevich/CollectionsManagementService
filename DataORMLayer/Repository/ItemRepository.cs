@@ -13,9 +13,10 @@ public class ItemRepository : IItemRepository
         _context = context;
     }
 
-    public async Task CreateItemAsync(Item item)
+    public async Task AddItemAsync(Item item)
     {
-        throw new NotImplementedException();
+        _context.Items.Add(item);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteItemAsync(Guid itemId)

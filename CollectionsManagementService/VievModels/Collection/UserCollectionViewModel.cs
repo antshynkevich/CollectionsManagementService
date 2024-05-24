@@ -1,6 +1,4 @@
-﻿using DataORMLayer.Models;
-
-namespace CollectionsManagementService.VievModels;
+﻿namespace CollectionsManagementService.VievModels.Collection;
 
 public class UserCollectionViewModel
 {
