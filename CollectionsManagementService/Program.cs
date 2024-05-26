@@ -28,6 +28,14 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("AdminsOnly", policy => {
+        policy.RequireClaim("role", "admin");
+    });
+    options.AddPolicy("UserNotBlocked", policy =>
+        policy.RequireAssertion(context => !context.User.HasClaim(c => c.Type == "blocked" || c.Value == "blocked")));
+});
+
 builder.Services.AddSingleton<ICollectionMapper, CollectionMapper>();
 builder.Services.AddSingleton<IItemMapper, ItemMapper>();
 builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();

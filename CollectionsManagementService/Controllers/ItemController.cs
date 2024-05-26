@@ -1,10 +1,12 @@
 ﻿using CollectionsManagementService.Services.Interfaces;
 using CollectionsManagementService.VievModels.Item;
 using DataORMLayer.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsManagementService.Controllers;
 
+[Authorize(Policy = "UserNotBlocked")]
 public class ItemController : Controller
 {
     private readonly IItemRepository _itemRepository;
@@ -18,6 +20,7 @@ public class ItemController : Controller
         _collectionRepository = collectionRepository;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Index(string itemId)
     {

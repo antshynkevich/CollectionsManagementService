@@ -7,35 +7,68 @@ namespace DataORMLayer.EfCoreCode;
 
 public static class ApplicationDbInitializer
 {
-    private static readonly string _userId = "7D9B7113-A8F8-4035-99A7-A20DD400F6A3";
+    private static readonly string _userId1 = "950d7b27-1918-4296-9bd3-1d4e4de95f6a";
+    private static readonly string _userId2 = "f3b759c7-4ee0-4326-989e-b9f8861e44c9";
+    private static readonly string _userId3 = "87fdb39c-a62e-4559-a6cd-e7ae6c05f747";
 
     public static async Task SeedUsers(UserManager<ApplicationUser> userManager)
     {
-        if (userManager.FindByIdAsync(_userId).Result != null)
+        if (userManager.FindByIdAsync(_userId1).Result != null)
             return;
 
-        var seedEmail = "admin.account@security.com";
-        var seedPassword = "ABC3_xyz!com";
+        var seedEmail1 = "admin.account@security.com";
+        var seedPassword1 = "ABC3_xyz!com";
+        var seedEmail2 = "egunner0@bandcamp.com";
+        var seedPassword2 = "bZ9&<~&u8";
+        var seedEmail3 = "slloyd1@google.co.uk";
+        var seedPassword3 = "zR6=C/M,*oU,($";
 
-        if (userManager.FindByEmailAsync(seedEmail).Result == null)
+        var user1 = new ApplicationUser
         {
-            var user = new ApplicationUser
-            {
-                Id = _userId,
-                UserName = seedEmail,
-                Email = seedEmail,
-                NormalizedEmail = seedEmail.ToUpper(),
-                NormalizedUserName = seedEmail.ToUpper()
-            };
+            Id = _userId1,
+            UserName = seedEmail1,
+            Email = seedEmail1,
+            NormalizedEmail = seedEmail1.ToUpper(),
+            NormalizedUserName = seedEmail1.ToUpper()
+        };
 
-            await userManager.CreateAsync(user, seedPassword);
-            var adminClaim = new Claim("role", "admin", ClaimTypes.Role);
-            //var blockedClaim = new Claim("blocked", "no");
-            var userName = new Claim("username", "Anton Shynkevich", ClaimTypes.Name);
-            await userManager.AddClaimAsync(user, adminClaim);
-            //await userManager.AddClaimAsync(user, blockedClaim);
-            await userManager.AddClaimAsync(user, userName);
-        }
+        await userManager.CreateAsync(user1, seedPassword1);
+        var roleClaim1 = new Claim("role", "admin");
+        var userName1 = new Claim("username", "Comrade Admin");
+        await userManager.AddClaimAsync(user1, roleClaim1);
+        await userManager.AddClaimAsync(user1, userName1);
+
+        var user2 = new ApplicationUser
+        {
+            Id = _userId2,
+            UserName = seedEmail2,
+            Email = seedEmail2,
+            NormalizedEmail = seedEmail2.ToUpper(),
+            NormalizedUserName = seedEmail2.ToUpper()
+        };
+
+        await userManager.CreateAsync(user2, seedPassword2);
+        var roleClaim2 = new Claim("role", "user");
+        var userName2 = new Claim("username", "Errol Gunner");
+        await userManager.AddClaimAsync(user2, roleClaim2);
+        await userManager.AddClaimAsync(user2, userName2);
+
+        var user3 = new ApplicationUser
+        {
+            Id = _userId3,
+            UserName = seedEmail3,
+            Email = seedEmail3,
+            NormalizedEmail = seedEmail3.ToUpper(),
+            NormalizedUserName = seedEmail3.ToUpper()
+        };
+
+        await userManager.CreateAsync(user3, seedPassword3);
+        var blockedClaim = new Claim("blocked", "blocked");
+        var userName3 = new Claim("username", "Stefanie Lloyd");
+        var roleClaim3 = new Claim("role", "user");
+        await userManager.AddClaimAsync(user3, roleClaim3);
+        await userManager.AddClaimAsync(user3, userName3);
+        await userManager.AddClaimAsync(user3, blockedClaim);
     }
 
     public static async Task Initialize(AppDbContext dbContext)
@@ -54,7 +87,7 @@ public static class ApplicationDbInitializer
                 Name = "IMDb top 10 movies",
                 CategoryId = 1,
                 Description = "The description of the \"IMDb top 10 movies\" collection",
-                UserId = _userId,
+                UserId = _userId1,
                 CreationDate = DateTime.UtcNow
             },
             new Collection
@@ -63,7 +96,7 @@ public static class ApplicationDbInitializer
                 Name = "Art of Three Faiths",
                 CategoryId = 2,
                 Description = "A Torah, a Bible, and a Qur’an",
-                UserId = _userId,
+                UserId = _userId1,
                 CreationDate = DateTime.UtcNow
             }
         };

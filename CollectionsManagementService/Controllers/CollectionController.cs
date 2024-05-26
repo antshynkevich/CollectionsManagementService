@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsManagementService.Controllers;
 
-[Authorize]
+[Authorize(Policy = "UserNotBlocked")]
 [Route("[controller]/[action]")]
 public class CollectionController : Controller
 {
@@ -31,6 +31,7 @@ public class CollectionController : Controller
         _cloudService = cloudService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetCollection(string collectionId)
     {
@@ -54,6 +55,7 @@ public class CollectionController : Controller
         return View("MyCollections", userCollectionsVM);
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> Index()
     {
