@@ -25,7 +25,7 @@ public class CollectionMapper : ICollectionMapper
             CollectionId = collectionId,
             Name = collectionVM.Name,
             Description = collectionVM.Description,
-            CreateDate = DateTime.UtcNow,
+            CreationDate = DateTime.UtcNow,
             ImageUrl = collectionVM.ImageUrl,
             CategoryId = int.Parse(collectionVM.CategoryId),
             UserId = userId,

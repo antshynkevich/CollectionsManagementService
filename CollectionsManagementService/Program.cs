@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using CollectionsManagementService.Services;
 using CollectionsManagementService.Services.Interfaces;
 using CloudinaryDotNet;
+using CollectionsManagementService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var userManager = (UserManager<ApplicationUser>)scope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>));
+    var userManager = scope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>)) as UserManager<ApplicationUser>;
     await ApplicationDbInitializer.SeedUsers(userManager);
 }
 
@@ -51,6 +52,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 
+await app.SeedServerWithDataAsync();
 app.UseStaticFiles();
 
 app.UseRouting();

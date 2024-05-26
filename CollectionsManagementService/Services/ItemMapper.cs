@@ -55,6 +55,7 @@ public class ItemMapper : IItemMapper
             ItemId = itemId,
             CollectionId = viewModel.CollectionId,
             Name = viewModel.Name,
+            CreationDate = DateTime.UtcNow,
         };
 
         if (viewModel.IntegerFields != null)

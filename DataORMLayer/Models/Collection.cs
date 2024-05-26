@@ -16,7 +16,7 @@ public class Collection
     [MaxLength(128)]
     public string? ImageUrl { get; set; }
     [Column(TypeName = "datetime2")]
-    public DateTime CreateDate { get; set; }
+    public DateTime CreationDate { get; set; }
 
     public Category Category { get; set; }
     public ICollection<Item> Items { get; set; }
