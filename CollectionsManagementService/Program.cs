@@ -31,9 +31,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("AdminsOnly", policy => {
         policy.RequireClaim("role", "admin");
+        policy.RequireAuthenticatedUser();
     });
-    options.AddPolicy("UserNotBlocked", policy =>
-        policy.RequireAssertion(context => !context.User.HasClaim(c => c.Type == "blocked" || c.Value == "blocked")));
+    options.AddPolicy("UserNotBlocked", policy => { 
+        policy.RequireAuthenticatedUser();
+        policy.RequireAssertion(context => !context.User.HasClaim(c => c.Type == "blocked" || c.Value == "blocked"));
+    });
 });
 
 builder.Services.AddSingleton<ICollectionMapper, CollectionMapper>();
