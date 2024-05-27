@@ -13,4 +13,5 @@ public interface ICollectionRepository
     Collection Get(Expression<Func<Collection, bool>> filter);
     Task UpdateCollectionAsync(Collection collection);
     Task DeleteCollectionAsync(Guid collectionId);
+    Task<List<Collection>> GetLargestCollectionsAsync(int number = 5);
 }

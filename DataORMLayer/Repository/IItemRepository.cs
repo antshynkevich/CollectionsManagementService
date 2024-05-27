@@ -8,4 +8,5 @@ public interface IItemRepository
     Task DeleteItemAsync(Guid itemId);
     Task UpdateItemAsync(Item item);
     Task AddItemAsync(Item item);
+    Task<List<Item>> GetNewestItemsAsync(int number = 5);
 }

@@ -5,7 +5,8 @@ namespace CollectionsManagementService.Services.Interfaces;
 
 public interface IItemMapper
 {
-    DetailedItemViewModel MapToItemViewModel(Item item);
+    DetailedItemViewModel MapToDetailedItemViewModel(Item item);
     CreateItemViewModel MapToCreateItemViewModel(Collection collection);
     Item MapToItem(CreateItemViewModel viewModel);
+    ItemViewModel MapToItemViewModel(Item item);
 }

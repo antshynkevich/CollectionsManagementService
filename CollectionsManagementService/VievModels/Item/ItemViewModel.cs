@@ -9,4 +9,5 @@ public class ItemViewModel
     public List<ItemFieldViewModel<DateOnly>> DateFields { get; set; }
     public List<ItemFieldViewModel<bool>> BoolFields { get; set; }
     public List<ItemFieldViewModel<string>> TextFields { get; set; }
+    public DateTime CreationDate { get; set; }
 }

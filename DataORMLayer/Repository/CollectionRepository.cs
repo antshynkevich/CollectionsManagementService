@@ -109,4 +109,15 @@ public class CollectionRepository : ICollectionRepository
         _context.Collections.Remove(collection);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Collection>> GetLargestCollectionsAsync(int number = 5)
+    {
+        return await _context.Collections
+            .OrderByDescending(c => c.Items.Count)
+            .Take(number)
+            .Include(c => c.CollectionFields)
+            .Include(c => c.Category)
+            .Include(c => c.Items)
+            .ToListAsync();
+    }
 }

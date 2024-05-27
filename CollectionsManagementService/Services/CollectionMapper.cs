@@ -57,9 +57,9 @@ public class CollectionMapper : ICollectionMapper
         return collection;
     }
 
-    public UserCollectionViewModel MapToCollectionViewModel(Collection collection)
+    public CollectionViewModel MapToCollectionViewModel(Collection collection)
     {
-        var collectionVM = new UserCollectionViewModel
+        var collectionVM = new CollectionViewModel
         {
             CollectionId = collection.CollectionId,
             CollectionName = collection.Name,
@@ -90,7 +90,7 @@ public class CollectionMapper : ICollectionMapper
         };
     }
 
-    public List<UserCollectionViewModel> MapToCollectionViewModelList(List<Collection> collections)
+    public List<CollectionViewModel> MapToCollectionViewModelList(List<Collection> collections)
     {
         return collections.Select(MapToCollectionViewModel).ToList();
     }
@@ -114,7 +114,7 @@ public class CollectionMapper : ICollectionMapper
         return detailedViewModel;
     }
 
-    public ItemViewModel MapToItemViewModel(Item item)
+    private ItemViewModel MapToItemViewModel(Item item)
     {
         return new ItemViewModel
         {
@@ -125,6 +125,24 @@ public class CollectionMapper : ICollectionMapper
             DateFields = item.DateFields.Select(MapItemFieldHelper<DateOnly>.MapToItemViewModel).ToList(),
             StringFields = item.StringFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
             TextFields = item.TextFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
+        };
+    }
+
+    public HomeCollectionViewModel MapToHomeCollectionVM(Collection collection)
+    {
+        return new HomeCollectionViewModel
+        {
+            CollectionId = collection.CollectionId,
+            CollectionName = collection.Name,
+            Description = collection.Description,
+            CategoryName = collection.Category.Name,
+            ItemsNumber = collection.Items.Count,
+            CustomCollectionFields = collection.CollectionFields
+            .Select(f => new CollectionFieldViewModel
+            {
+                FieldName = f.FieldName,
+                FildTypeName = f.FieldType.ToString()
+            }).ToList()
         };
     }
 }

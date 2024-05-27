@@ -1,8 +1,134 @@
-﻿@{
+﻿@using DataORMLayer.Models
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@model CollectionsManagementService.VievModels.HomePageViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="">
+    <div class="container mt-4 mb-5">
+        <h1 class="display-5 text-center my-2">Welcome to the <span class="fw-bold">My collection shelf</span> service!</h1>
+        <div class="row my-3">
+            <div class="col-4">
+                <img src="~/app_logo_exp.svg" class="img-fluid" />
+            </div>
+            <div class="col-7 mx-1">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <p class="my-2 lead">Thank you for your registration @User.FindFirstValue("username")! You can go to <a asp-controller="Collection" asp-action="ShowUserCollections">your collection table</a> to view your collections or <a asp-controller="Collection" asp-action="Create">create a new one</a>.</p>
+                }
+                else
+                {
+                    <p class="my-2 lead">Here, you can create and share your own collections and collection items! You can also view, like, and comment other people's collections.<br />
+                        Please, <a asp-area="Identity" asp-page="/Account/Login" asp-page-handler="OnGetAsync">log in</a>
+                        to create your own collection. You do not need to log in to read user collections.</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2 class="display-6 my-2">Here are five of the largest collections in the table!</h2>
+        <div>
+            <table class="table table-light table-striped table-bordered shadow">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Category</th>
+                        <th>Collection name</th>
+                        <th># of items</th>
+                        <th>Description</th>
+                        <th>Custom fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var index = 1; }
+                    @foreach (var collection in Model.HomeCollections)
+                    {
+                        <tr>
+                            <td>@index</td>
+                            <td>@collection.CategoryName</td>
+                            <td>
+                                <a asp-controller="collection" asp-action="GetCollection" asp-route-collectionId="@collection.CollectionId">
+                                    @collection.CollectionName
+                                </a>
+                            </td>
+                            <td>@collection.ItemsNumber</td>
+                            <td>@collection.Description</td>
+                            <td>
+                                <ul class="ps-3 my-0">
+                                    @foreach (var collectionField in collection.CustomCollectionFields)
+                                    {
+                                        <li class="small">@collectionField.FildTypeName - @collectionField.FieldName</li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                        index++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <br />
+        <h2 class="display-6 my-2">Here are the five last added items in the table!</h2>
+        <div>
+            <table class="table table-light table-striped table-bordered shadow">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item name</th>
+                        <th>String fields of items</th>
+                        <th>Number fields of items</th>
+                        <th>Boolean fields of items</th>
+                        <th>Creation date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{var ind = 1;}
+                    @foreach (var item in Model.HomeItems)
+                    {
+                        <tr>
+                            <td>@ind</td>
+                            <td>
+                                <a asp-controller="Item" asp-action="Index" asp-route-itemId="@item.ItemId">@item.ItemName</a>
+                            </td>
+                            <td>
+                                <ul class="ps-3 my-0">
+                                    @foreach (var field in item.StringFields)
+                                    {
+                                        <li>@field.FieldName - @field.Value</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="ps-3 my-0">
+                                    @foreach (var field in item.IntegerFields)
+                                    {
+                                        <li>@field.FieldName - @field.Value</li>
+                                    }
+                                </ul class="ps-3 my-0">
+                            </td>
+                            <td>
+                                <ul>
+                                    @foreach (var field in item.BoolFields)
+                                    {
+                                        <li>@field.FieldName - @field.Value</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                @item.CreationDate
+                            </td>
+                        </tr>
+                        ind++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

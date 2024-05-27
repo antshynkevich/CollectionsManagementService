@@ -30,7 +30,7 @@ public class ItemController : Controller
             return NotFound();
         }
 
-        var itemViewModel = _itemMapper.MapToItemViewModel(item);
+        var itemViewModel = _itemMapper.MapToDetailedItemViewModel(item);
         return View(itemViewModel);
     }
 

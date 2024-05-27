@@ -44,6 +44,20 @@ public class ItemRepository : IItemRepository
             .FirstOrDefaultAsync(c => c.ItemId == itemId);
     }
 
+    public async Task<List<Item>> GetNewestItemsAsync(int number = 5)
+    {
+        return await _context.Items
+            .OrderByDescending(i => i.CreationDate)
+            .Take(number)
+            .Include (i => i.Collection)
+            .Include (i => i.IntegerFields)
+            .Include(i => i.StringFields)
+            .Include(i => i.BooleanFields)
+            .Include(i => i.DateFields)
+            .Include(i => i.TextFields)
+            .ToListAsync();
+    }
+
     public async Task UpdateItemAsync(Item item)
     {
         throw new NotImplementedException();
