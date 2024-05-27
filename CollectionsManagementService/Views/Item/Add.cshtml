@@ -21,7 +21,7 @@
                         var label = $"{Model.StringFields[i].FieldName} - {Model.StringFields[i].FieldType}";
                         <div class="form-group">
                             <label asp-for="StringFields[i].Value">@label:</label>
-                            <input class="form-control" asp-for="StringFields[i].Value" />
+                            <input class="form-control" type="text" asp-for="StringFields[i].Value" />
                             <span asp-validation-for="StringFields[i].Value"></span>
                             <input type="hidden" asp-for="StringFields[i].CollectionFieldId" />
                         </div>
@@ -36,7 +36,7 @@
                         var label = $"{Model.IntegerFields[i].FieldName} - {Model.IntegerFields[i].FieldType}";
                         <div class="form-group">
                             <label asp-for="IntegerFields[i].Value">@label:</label>
-                            <input class="form-control" asp-for="IntegerFields[i].Value" />
+                            <input class="form-control" type="number" asp-for="IntegerFields[i].Value" />
                             <span asp-validation-for="IntegerFields[i].Value"></span>
                             <input type="hidden" asp-for="IntegerFields[i].CollectionFieldId" />
                         </div>
@@ -66,7 +66,7 @@
                         var label = $"{Model.BoolFields[i].FieldName} - {Model.BoolFields[i].FieldType}";
                         <div class="form-group">
                             <label asp-for="BoolFields[i].Value">@label:</label>
-                            <input class="form-control" type="date" asp-for="BoolFields[i].Value" />
+                            <input class="form-check" type="checkbox" asp-for="BoolFields[i].Value" />
                             <span asp-validation-for="BoolFields[i].Value"></span>
                             <input type="hidden" asp-for="BoolFields[i].CollectionFieldId" />
                         </div>
@@ -81,7 +81,7 @@
                         var label = $"{Model.TextFields[i].FieldName} - {Model.TextFields[i].FieldType}";
                         <div class="form-group">
                             <label asp-for="TextFields[i].Value">@label:</label>
-                            <input class="form-control" type="date" asp-for="TextFields[i].Value" />
+                            <input class="form-control" type="text" asp-for="TextFields[i].Value" />
                             <span asp-validation-for="TextFields[i].Value"></span>
                             <input type="hidden" asp-for="TextFields[i].CollectionFieldId" />
                         </div>
@@ -89,6 +89,6 @@
                 </div>
             }
         </div>
-        <button class="btn btn-outline-success" type="submit">Create Collection</button>
+        <button class="btn btn-outline-success" type="submit">Add the item</button>
     </form>
 </div>
