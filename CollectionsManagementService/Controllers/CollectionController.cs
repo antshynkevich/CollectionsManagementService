@@ -59,9 +59,9 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        //TODO: rewrite or delete this method
-        var collectionsWithFields = await _collectionRepository.GetAllAsync();
-        return View(collectionsWithFields);
+        var allCollections = await _collectionRepository.GetAllAsync();
+        var userCollectionsVM = _collectionMapper.MapToCollectionViewModelList(allCollections);
+        return View(userCollectionsVM);
     }
 
     [HttpGet]

@@ -47,7 +47,7 @@
                         @for (int i = 0, j = 1; i < Model.CollectionFields.Count; i++, j++)
                         {
                             <div class="form-group">
-                                <label asp-for="CollectionFields[i].FieldName">Field #@j @Model.CollectionFields[i].FildTypeName Field:</label>
+                                <label asp-for="CollectionFields[i].FieldName">Field #@j @Model.CollectionFields[i].FieldTypeName Field:</label>
                                 <input class="form-control" asp-for="CollectionFields[i].FieldName" />
                                 <input type="hidden" asp-for="CollectionFields[i].FieldId" />
                             </div>

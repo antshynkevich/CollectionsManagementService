@@ -1,34 +1,40 @@
-﻿@model List<DataORMLayer.Models.Collection>
+﻿@using CollectionsManagementService.VievModels.Collection
+@model List<CollectionViewModel>
 
-<div>
-    @foreach (var collection in Model)
-    {
-        <div>
-            CollectionId = @collection.CollectionId
-        </div>
-        <div>
-            Name = @collection.Name
-        </div>
-        <div>
-            CategoryId = @collection.CategoryId
-        </div>
-        <div>
-            Category.Name = @collection.Category.Name
-        </div>
-        <div>
-            Description = @collection.Description
-        </div>
-        foreach (var collectionField in collection.CollectionFields)
+<h1>All user collections</h1>
+<table class="table table-striped table-bordered shadow">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Category</th>
+            <th>Collection name</th>
+            <th>Description</th>
+            <th>Custom fields</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int index = 1; }
+        @foreach (var collection in Model)
         {
-            <div>
-                CollectionFieldId = @collectionField.CollectionFieldId
-            </div>
-            <div>
-                FieldName = @collectionField.FieldName
-            </div>
-            <div>
-                FieldType = @collectionField.FieldType
-            </div>
+            <tr>
+                <td>@index</td>
+                <td>@collection.CategoryName</td>
+                <td>
+                    <a asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@collection.CollectionId">@collection.CollectionName</a>
+                </td>
+                <td>@collection.Description</td>
+                <td>
+                    <ul class="list-group list-group">
+                        @foreach (var customField in collection.CustomCollectionFields)
+                        {
+                            <li class="list-group-item list-group-item-info p-1">
+                                @customField.FieldName (@customField.FieldTypeName)  
+                            </li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+            index++;
         }
-    }
-</div>
+    </tbody>
+</table>

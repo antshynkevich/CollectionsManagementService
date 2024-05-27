@@ -69,7 +69,7 @@ public class CollectionMapper : ICollectionMapper
             .Select(f => new CollectionFieldViewModel
             {
                 FieldName = f.FieldName,
-                FildTypeName = f.FieldType.ToString()
+                FieldTypeName = f.FieldType.ToString()
             }).ToList()
         };
 
@@ -82,7 +82,12 @@ public class CollectionMapper : ICollectionMapper
         {
             CollectionId = collection.CollectionId,
             CollectionFields = collection.CollectionFields
-                .Select(x => new CollectionFieldViewModel { FieldName = x.FieldName, FieldId = x.CollectionFieldId, FildTypeName = x.FieldType.ToString() }).ToList(),
+                .Select(x => new CollectionFieldViewModel 
+                {
+                    FieldName = x.FieldName, 
+                    FieldId = x.CollectionFieldId, 
+                    FieldTypeName = x.FieldType.ToString()
+                }).ToList(),
             Description = collection.Description,
             Name = collection.Name,
             ImageUrl = collection.ImageUrl
@@ -106,7 +111,11 @@ public class CollectionMapper : ICollectionMapper
             ImageUrl = collection.ImageUrl,
             CollectionId = collection.CollectionId,
             CustomCollectionFields = collection.CollectionFields
-                .Select(f => new CollectionFieldViewModel { FieldName = f.FieldName, FildTypeName = f.FieldType.ToString() }).ToList(),
+                .Select(f => new CollectionFieldViewModel
+                {
+                    FieldName = f.FieldName,
+                    FieldTypeName = f.FieldType.ToString()
+                }).ToList(),
             Items = collection.Items
                 .Select(MapToItemViewModel).ToList(),
         };
@@ -141,7 +150,7 @@ public class CollectionMapper : ICollectionMapper
             .Select(f => new CollectionFieldViewModel
             {
                 FieldName = f.FieldName,
-                FildTypeName = f.FieldType.ToString()
+                FieldTypeName = f.FieldType.ToString()
             }).ToList()
         };
     }

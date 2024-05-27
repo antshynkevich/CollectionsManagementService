@@ -6,7 +6,7 @@ public class CollectionFieldViewModel
 {
     public Guid FieldId { get; set; }
     public string FieldName { get; set; }
-    public string FildTypeName { get; set; }
+    public string FieldTypeName { get; set; }
     public FieldType FieldType { get; set; }
     public bool IsFieldNeeded { get; set; }
 }
