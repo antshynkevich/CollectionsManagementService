@@ -71,6 +71,7 @@ public class CollectionRepository : ICollectionRepository
                 .ThenInclude(field => field.CollectionField)
             .Include(coll => coll.Items)
                 .ThenInclude(item => item.BooleanFields)
+                .ThenInclude(field => field.CollectionField)
             .Include(coll => coll.CollectionFields)
             .Include(coll => coll.Category)
             .Include(coll => coll.ApplicationUser)

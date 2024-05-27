@@ -73,32 +73,39 @@
                         </a>
                     </td>
                     <td>
-                        @foreach (var customField in item.StringFields)
-                        {
-                            <span>
-                                @customField.FieldName - 
-                                @customField.Value
-                            </span>
-                        }
+                        <ul class="my-0">
+                            @foreach (var customField in item.StringFields)
+                            {
+                                <li>
+                                    @customField.FieldName -
+                                    @customField.Value
+                                </li>
+                            }
+                        </ul>
                     </td>
                     <td>
-                        @foreach (var customField in item.IntegerFields)
-                        {
-                            <span>
-                                @customField.FieldName -
-                                @customField.Value
-                            </span>
-                        }
+                        <ul>
+                            @foreach (var customField in item.IntegerFields)
+                            {
+                                <li>
+                                    @customField.FieldName -
+                                    @customField.Value
+                                </li>
+                            }
+                        </ul>
                     </td>
                     <td>
-                        @foreach (var customField in item.DateFields)
-                        {
-                            <span>
+                        <ul>
+                            @foreach (var customField in item.DateFields)
+                            {
+                                <li>
 
-                                @customField.FieldName -
-                                @customField.Value
-                            </span>
-                        }
+                                    @customField.FieldName -
+                                    @customField.Value
+                                </li>
+                            }
+                        </ul>
+
                     </td>
                 </tr>
                 index++;
