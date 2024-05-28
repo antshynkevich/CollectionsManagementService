@@ -53,14 +53,14 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Category>().HasData(
             new Category { CategoryId = 1, Name = "Movies" },
             new Category { CategoryId = 2, Name = "Books" },
-            new Category { CategoryId = 3, Name = "Clothes" },
+            new Category { CategoryId = 3, Name = "Electronic Devices and Gadgets" },
             new Category { CategoryId = 4, Name = "Games, Toys, and Figures" },
             new Category { CategoryId = 5, Name = "Bills and Coins, Stamps" },
-            new Category { CategoryId = 6, Name = "Music Albums, Clips, and Records" },
-            new Category { CategoryId = 7, Name = "Product and Service Reviews" },
+            new Category { CategoryId = 6, Name = "Clothes" },
+            new Category { CategoryId = 7, Name = "Music Albums, Clips, and Records" },
             new Category { CategoryId = 8, Name = "Cars and Vehicles" },
             new Category { CategoryId = 9, Name = "Dish Recipes" },
-            new Category { CategoryId = 10, Name = "Firearms" },
+            new Category { CategoryId = 10, Name = "Products and Services Reviews" },
             new Category { CategoryId = 11, Name = "Other" }
         );
     }

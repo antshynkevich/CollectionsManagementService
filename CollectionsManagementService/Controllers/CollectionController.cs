@@ -1,4 +1,5 @@
-﻿using CollectionsManagementService.Services.Interfaces;
+﻿using CollectionsManagementService.Services;
+using CollectionsManagementService.Services.Interfaces;
 using CollectionsManagementService.VievModels.Collection;
 using DataORMLayer.Models;
 using DataORMLayer.Repository;
@@ -35,9 +36,13 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(string sortOrder, int? categoryId)
     {
-        ViewData["DateSortParm"] = string.IsNullOrEmpty(sortOrder) ? "date" : "";
+        ViewData["DateSortParm"] = (string.IsNullOrEmpty(sortOrder) || sortOrder == "date_desc") ? "date" : "date_desc";
         ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "name";
-
+        ViewData["Category"] = categoryId;
+        Helper.SortSignHelper(sortOrder, out string? nameSign, out string? dateSing);
+        ViewData["NameSign"] = nameSign;
+        ViewData["DateSign"] = dateSing;
+        
         var sortedCollections = await _collectionRepository.GetSortedCollectionsAsync(sortOrder, categoryId);
         var allCollectionsVm = _collectionMapper.MapToCollectionViewModelList(sortedCollections);
         var categories = await _categoryRepository.GetAllCategoriesAsync();

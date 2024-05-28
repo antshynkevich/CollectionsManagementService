@@ -1,7 +1,9 @@
 ﻿@using CollectionsManagementService.VievModels.Collection
 @model CollectionFilteredViewModel
 @{
-    ViewData["Title"] = "The latest user collections"; 
+    ViewData["Title"] = "The latest user collections";
+    var nameSortSign = ViewData["NameSign"];
+    var dateSortSign = ViewData["DateSign"];
 }
 
 <h1 class="display-4">The latest user collections</h1>
@@ -26,12 +28,19 @@
             <th>#</th>
             <th>Category</th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Collection name</a>
+                 
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"
+                   asp-route-categoryId="@ViewData["Category"]" class="link-primary text-decoration-none">
+                   Collection name @nameSortSign
+                </a>
             </th>
             <th>Description</th>
             <th>Custom fields</th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">Creation date</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]"
+                   asp-route-categoryId="@ViewData["Category"]" class="link-primary text-decoration-none">
+                    Creation date @dateSortSign
+                </a>
             </th>
         </tr>
     </thead>
@@ -45,7 +54,7 @@
                 <td>
                     <a asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@collection.CollectionId">@collection.CollectionName</a>
                 </td>
-                <td>@collection.Description</td>
+                <td width="35%">@collection.Description</td>
                 <td>
                     <ul class="list-group">
                         @foreach (var customField in collection.CustomCollectionFields)
@@ -57,8 +66,10 @@
                     </ul>
                 </td>
                 <td>
-                    <div>@collection.CreationDate.ToShortDateString()</div>
-                    <div class="text-secondary small text-end pe-2">@collection.CreationDate.ToShortTimeString()</div>
+                    <div class="col">
+                        @collection.CreationDate.ToShortDateString()
+                        <span class="text-secondary small">@collection.CreationDate.ToShortTimeString()</span>
+                    </div>
                 </td>
             </tr>
             index++;
