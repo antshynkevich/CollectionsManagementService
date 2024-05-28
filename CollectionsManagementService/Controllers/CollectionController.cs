@@ -33,6 +33,19 @@ public class CollectionController : Controller
 
     [AllowAnonymous]
     [HttpGet]
+    public async Task<IActionResult> Index(string sortOrder, int? categoryId)
+    {
+        ViewData["DateSortParm"] = string.IsNullOrEmpty(sortOrder) ? "date" : "";
+        ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "name";
+
+        var sortedCollections = await _collectionRepository.GetSortedCollectionsAsync(sortOrder, categoryId);
+        var allCollectionsVm = _collectionMapper.MapToCollectionViewModelList(sortedCollections);
+        var categories = await _categoryRepository.GetAllCategoriesAsync();
+        return View(new CollectionFilteredViewModel(categories, allCollectionsVm));
+    }
+
+    [AllowAnonymous]
+    [HttpGet]
     public async Task<IActionResult> GetCollection(string collectionId)
     {
         var collection = await _collectionRepository.GetWithItemsByIdAsync(Guid.Parse(collectionId));
@@ -53,15 +66,6 @@ public class CollectionController : Controller
         var userCollections = await _collectionRepository.GetCollectionsByUserIdAsync(currentUser.Id);
         var userCollectionsVM = _collectionMapper.MapToCollectionViewModelList(userCollections);
         return View("MyCollections", userCollectionsVM);
-    }
-
-    [AllowAnonymous]
-    [HttpGet]
-    public async Task<IActionResult> Index()
-    {
-        var allCollections = await _collectionRepository.GetAllAsync();
-        var userCollectionsVM = _collectionMapper.MapToCollectionViewModelList(allCollections);
-        return View(userCollectionsVM);
     }
 
     [HttpGet]

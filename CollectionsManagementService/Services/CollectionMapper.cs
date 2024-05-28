@@ -65,6 +65,7 @@ public class CollectionMapper : ICollectionMapper
             CollectionName = collection.Name,
             Description = collection.Description,
             CategoryName = collection.Category.Name,
+            CreationDate = collection.CreationDate,
             CustomCollectionFields = collection.CollectionFields
             .Select(f => new CollectionFieldViewModel
             {
@@ -107,9 +108,10 @@ public class CollectionMapper : ICollectionMapper
             CollectionName = collection.Name,
             Description = collection.Description,
             CategoryName = collection.Category.Name,
-            UserName = collection.ApplicationUser.UserName,
+            UserName = collection.ApplicationUser?.UserName ?? "default username",
             ImageUrl = collection.ImageUrl,
             CollectionId = collection.CollectionId,
+            CreationDate = collection.CreationDate,
             CustomCollectionFields = collection.CollectionFields
                 .Select(f => new CollectionFieldViewModel
                 {

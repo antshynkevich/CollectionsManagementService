@@ -13,32 +13,31 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Collection category</th>
+            <th>Category</th>
             <th>Your collection</th>
             <th>Collection</th>
-            <th>The custom fields of the collection</th>
+            <th>Custom fields</th>
             <th>Control</th>
         </tr>
     </thead>
     <tbody>
-        @{ int index = 0; }
+        @{ int index = 1; }
         @foreach (var collection in Model)
         {
             <tr>
-                <td>@{ index++; }@index</td>
+                <td>@index</td>
                 <td>@collection.CategoryName</td>
                 <td>
                     <a asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@collection.CollectionId">@collection.CollectionName</a>
                 </td>
                 <td>@collection.Description</td>
                 <td>
-                    @for (int l = 0; l < @collection.CustomCollectionFields.Count; l++)
-                    {
-                        <p>
-                            @collection.CustomCollectionFields[l].FieldTypeName -
-                            @collection.CustomCollectionFields[l].FieldName
-                        </p>
-                    }
+                    <ul class="list-group">
+                        @foreach (var collectionField in collection.CustomCollectionFields)
+                        {
+                            <li class="list-group-item list-group-item-danger p-2">@collectionField.FieldName (@collectionField.FieldTypeName)</li>
+                        }
+                    </ul>
                 </td>
                 <td>
                     <div>
@@ -51,6 +50,7 @@
                     </div>
                 </td>
             </tr>
+            index++;
         }
     </tbody>
 </table>

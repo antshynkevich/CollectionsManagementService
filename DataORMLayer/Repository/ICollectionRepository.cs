@@ -14,4 +14,5 @@ public interface ICollectionRepository
     Task UpdateCollectionAsync(Collection collection);
     Task DeleteCollectionAsync(Guid collectionId);
     Task<List<Collection>> GetLargestCollectionsAsync(int number = 5);
+    Task<List<Collection>> GetSortedCollectionsAsync(string sortOrder, int? categoryId);
 }

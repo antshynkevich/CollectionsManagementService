@@ -120,4 +120,27 @@ public class CollectionRepository : ICollectionRepository
             .Include(c => c.Items)
             .ToListAsync();
     }
+
+    public async Task<List<Collection>> GetSortedCollectionsAsync(string sortOrder, int? categoryId)
+    {
+        var collections = _context.Collections.AsQueryable();
+        if (categoryId.HasValue)
+        {
+            collections = collections.Where(c  => c.CategoryId == categoryId);
+        }
+
+        collections = sortOrder switch
+        {
+            "name_desc" => collections.OrderByDescending(c => c.Name),
+            "name" => collections.OrderBy(c => c.Name),
+            "date" => collections.OrderBy(c => c.CreationDate),
+            _ => collections.OrderByDescending(c => c.CreationDate),
+        };
+
+        return await collections
+            .Include(c => c.CollectionFields)
+            .Include(c => c.Category)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }

@@ -19,7 +19,7 @@
             <div class="col-7 mx-1">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <p class="my-2 lead">Thank you for your registration @User.FindFirstValue("username")! You can go to <a asp-controller="Collection" asp-action="ShowUserCollections">your collection table</a> to view your collections or <a asp-controller="Collection" asp-action="Create">create a new one</a>.</p>
+                    <p class="my-2 lead">Thank you for joining @User.FindFirstValue("username")! You can go to <a asp-controller="Collection" asp-action="ShowUserCollections">your collection page</a> to view your collections or <a asp-controller="Collection" asp-action="Create">create a new one</a>.</p>
                 }
                 else
                 {
@@ -59,10 +59,10 @@
                             <td>@collection.ItemsNumber</td>
                             <td>@collection.Description</td>
                             <td>
-                                <ul class="ps-3 my-0">
+                                <ul class="list-group">
                                     @foreach (var collectionField in collection.CustomCollectionFields)
                                     {
-                                        <li class="small">@collectionField.FieldTypeName - @collectionField.FieldName</li>
+                                        <li class="list-group-item list-group-item-primary p-2">@collectionField.FieldName (@collectionField.FieldTypeName)</li>
                                     }
                                 </ul>
                             </td>
@@ -98,26 +98,26 @@
                                 <a asp-controller="Item" asp-action="Index" asp-route-itemId="@item.ItemId">@item.ItemName</a>
                             </td>
                             <td>
-                                <ul class="ps-3 my-0">
+                                <ul class="list-group">
                                     @foreach (var field in item.StringFields)
                                     {
-                                        <li>@field.FieldName - @field.Value</li>
+                                        <li class="list-group-item list-group-item-info">@field.FieldName - @field.Value</li>
                                     }
                                 </ul>
                             </td>
                             <td>
-                                <ul class="ps-3 my-0">
+                                <ul class="list-group">
                                     @foreach (var field in item.IntegerFields)
                                     {
-                                        <li>@field.FieldName - @field.Value</li>
+                                        <li class="list-group-item list-group-item-warning">@field.FieldName - @field.Value</li>
                                     }
-                                </ul class="ps-3 my-0">
+                                </ul class="list-group">
                             </td>
                             <td>
-                                <ul>
+                                <ul class="list-group">
                                     @foreach (var field in item.BoolFields)
                                     {
-                                        <li>@field.FieldName - @field.Value</li>
+                                        <li class="list-group-item list-group-item-success">@field.FieldName - @field.Value</li>
                                     }
                                 </ul>
                             </td>
