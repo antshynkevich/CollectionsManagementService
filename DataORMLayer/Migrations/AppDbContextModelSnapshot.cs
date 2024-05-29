@@ -102,7 +102,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -198,7 +198,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Collections", (string)null);
+                    b.ToTable("Collections");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CollectionField", b =>
@@ -223,7 +223,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("CollectionFields", (string)null);
+                    b.ToTable("CollectionFields");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.BooleanField", b =>
@@ -247,7 +247,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("BooleanFields", (string)null);
+                    b.ToTable("BooleanFields");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.DateField", b =>
@@ -271,7 +271,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("DateFields", (string)null);
+                    b.ToTable("DateFields");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.IntegerField", b =>
@@ -295,7 +295,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("IntegerFields", (string)null);
+                    b.ToTable("IntegerFields");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.StringField", b =>
@@ -321,7 +321,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("StringFields", (string)null);
+                    b.ToTable("StringFields");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.TextField", b =>
@@ -347,7 +347,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("TextFields", (string)null);
+                    b.ToTable("TextFields");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Item", b =>
@@ -371,7 +371,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("Items", (string)null);
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Tag", b =>
@@ -387,7 +387,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.UserComment", b =>
@@ -417,7 +417,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserComments", (string)null);
+                    b.ToTable("UserComments");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.UserLike", b =>
@@ -442,7 +442,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLikes", (string)null);
+                    b.ToTable("UserLikes");
                 });
 
             modelBuilder.Entity("ItemTag", b =>
@@ -457,7 +457,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("TagsTagId");
 
-                    b.ToTable("ItemTag", (string)null);
+                    b.ToTable("ItemTag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
