@@ -21,4 +21,6 @@ public class Item
     public ICollection<TextField> TextFields { get; set; }
     public ICollection<BooleanField> BooleanFields { get; set; }
     public ICollection<DateField> DateFields { get; set; }
+    public ICollection<UserComment> UserComments { get; set; }
+    public ICollection<UserLike> UserLikes { get; set; }
 }

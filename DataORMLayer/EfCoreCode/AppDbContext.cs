@@ -21,6 +21,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<IntegerField> IntegerFields { get; set; }
     public DbSet<BooleanField> BooleanFields { get; set; }
     public DbSet<TextField> TextFields { get; set; }
+    public DbSet<UserComment> UserComments { get; set; }
+    public DbSet<UserLike> UserLikes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -48,6 +50,14 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Item>()
             .HasMany(e => e.DateFields)
             .WithOne(e => e.Item)
+            .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<ApplicationUser>()
+            .HasMany(e => e.UserComments)
+            .WithOne(e => e.User)
+            .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<ApplicationUser>()
+            .HasMany(e => e.UserLikes)
+            .WithOne(e => e.User)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Category>().HasData(
