@@ -122,7 +122,12 @@
                                 </ul>
                             </td>
                             <td>
-                                @item.CreationDate
+                                <div class="text-end">
+                                    @item.CreationDate.ToShortDateString()
+                                </div>
+                                <div class="text-end text-secondary small">
+                                    @item.CreationDate.ToShortTimeString()
+                                </div>
                             </td>
                         </tr>
                         ind++;

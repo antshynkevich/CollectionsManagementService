@@ -130,4 +130,18 @@ public class ItemMapper : IItemMapper
             CreationDate = item.CreationDate
         };
     }
+
+    public ItemSearchPageViewModel MapToItemFromSearch(Item item)
+    {
+        return new ItemSearchPageViewModel()
+        {
+            ItemId = item.ItemId,
+            Name = item.Name,
+            CreationDate = item.CreationDate,
+            CollectionId = item.CollectionId,
+            CollectionName = item.Collection.Name,
+            StringFields = item.StringFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
+            TextFields = item.TextFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
+        };
+    }
 }

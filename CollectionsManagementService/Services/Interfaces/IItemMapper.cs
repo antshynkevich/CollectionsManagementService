@@ -9,4 +9,5 @@ public interface IItemMapper
     CreateItemViewModel MapToCreateItemViewModel(Collection collection);
     Item MapToItem(CreateItemViewModel viewModel);
     ItemViewModel MapToItemViewModel(Item item);
+    ItemSearchPageViewModel MapToItemFromSearch(Item item);
 }

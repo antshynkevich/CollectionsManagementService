@@ -143,4 +143,31 @@ public class CollectionRepository : ICollectionRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<List<Collection>> GetResultFromSearchAsync(string searchString)
+    {
+        var collectionFieldsIds = await _context.CollectionFields
+            .Where(cf => EF.Functions.FreeText(cf.FieldName, $"\"{searchString}\""))
+            .Select(cf => cf.CollectionId)
+            .ToListAsync();
+
+        var collectionsIds = await _context.Collections
+            .Where(c => EF.Functions.Contains(c.Description, $"\"{searchString}\"") ||
+                EF.Functions.Contains(c.Category.Name, $"\"{searchString}\""))
+            .Select(c => c.CollectionId)
+            .ToListAsync();
+
+        collectionFieldsIds.AddRange(collectionsIds);
+        var uniqueIds = collectionFieldsIds.Distinct();
+
+        var data = await _context.Collections
+            .Where(c => uniqueIds.Contains(c.CollectionId))
+        .Include(c => c.CollectionFields)
+        .Include(c => c.Category)
+        .OrderByDescending(c => c.CreationDate)
+        .AsNoTracking()
+        .ToListAsync();
+
+        return data;
+    }
 }

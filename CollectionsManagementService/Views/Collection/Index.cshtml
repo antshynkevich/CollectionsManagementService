@@ -66,11 +66,12 @@
                     </ul>
                 </td>
                 <td>
-                    <div class="col">
+                    <div class="text-end">
                         @collection.CreationDate.ToShortDateString()
-                        <span class="text-secondary small">@collection.CreationDate.ToShortTimeString()</span>
                     </div>
-                </td>
+                    <div class="text-end text-secondary small">
+                        @collection.CreationDate.ToShortTimeString()
+                    </div>
             </tr>
             index++;
         }
