@@ -38,6 +38,21 @@ namespace CollectionsManagementService.Controllers
             return View(twoCollections);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchStr)
+        {
+            ViewData["SearchString"] = searchStr;
+            var items = await _itemRepository.GetResultFromSearchAsync(searchStr);
+            var collections = await _collectionRepository.GetResultFromSearchAsync(searchStr);
+            var searchResult = new SearchResultViewModel()
+            {
+                Items = items.Select(i => _itemMapper.MapToItemFromSearch(i)).ToList(),
+                Collections = _collectionMapper.MapToCollectionViewModelList(collections)
+            };
+
+            return View(searchResult);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

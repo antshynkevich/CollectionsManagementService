@@ -23,6 +23,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<TextField> TextFields { get; set; }
     public DbSet<UserComment> UserComments { get; set; }
     public DbSet<UserLike> UserLikes { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

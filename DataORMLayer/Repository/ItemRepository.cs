@@ -58,6 +58,58 @@ public class ItemRepository : IItemRepository
             .ToListAsync();
     }
 
+    public async Task<List<Item>> GetResultFromSearchAsync(string searchString)
+    {
+        var tagsItems = await _context.Tags
+            .Where(t => EF.Functions.Contains(t.Name, $"\"{searchString}\""))
+            .Include(t => t.Items)
+            .Select(t => t.Items)
+            .ToListAsync();
+        
+        var allitemIds = new List<Guid>();
+        foreach (var items in tagsItems)
+        {
+            allitemIds.AddRange(items.Select(i => i.ItemId));
+        }
+
+        var itemsByNameIds = await _context.Items
+            .Where(i => EF.Functions.FreeText(i.Name, $"\"{searchString}\""))
+            .Select(i => i.ItemId)
+            .ToListAsync();
+        var commentsIds = await _context.UserComments
+            .Where(c => EF.Functions.FreeText(c.CommentText, $"\"{searchString}\""))
+            .Select(c => c.ItemId)
+            .ToListAsync();
+        var textFieldsIds = await _context.TextFields
+            .Where(c => EF.Functions.FreeText(c.Value, $"\"{searchString}\""))
+            .Select(c => c.ItemId)
+            .ToListAsync();
+        var stringFieldsIds = await _context.StringFields
+            .Where(c => EF.Functions.FreeText(c.Value, $"\"{searchString}\""))
+            .Select (c => c.ItemId)
+            .ToListAsync();
+
+        allitemIds.AddRange(itemsByNameIds);
+        allitemIds.AddRange(commentsIds);
+        allitemIds.AddRange(textFieldsIds);
+        allitemIds.AddRange(stringFieldsIds);
+        var uniqueIds = allitemIds.Distinct().ToList();
+
+        var data = await _context.Items
+            .Where(i => uniqueIds.Contains(i.ItemId))
+            .Include(i => i.Collection)
+            .Include(i => i.StringFields)
+                .ThenInclude(f => f.CollectionField)
+            .Include(i => i.TextFields)
+                .ThenInclude(f => f.CollectionField)
+            .Include(i => i.Tags)
+            .OrderByDescending(i => i.CreationDate)
+            .AsNoTracking()
+            .ToListAsync();
+
+        return data;
+    }
+
     public async Task UpdateItemAsync(Item item)
     {
         throw new NotImplementedException();

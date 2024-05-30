@@ -1,0 +1,132 @@
+﻿@model CollectionsManagementService.VievModels.SearchResultViewModel
+
+
+@if (Model.Collections.Count == 0 && Model.Items.Count == 0)
+{
+    <h1 class="display-4 my-4 text-center" style="padding-top: 16%">We are sorry, but there are no results for "@ViewData["SearchString"]".</h1>
+    <p class="fs-4 text-center mt-3">
+        You can still view a list of <a asp-action="Index" asp-controller="Home">all user collections</a>.<br />
+        You can also <a asp-controller="Collection" asp-action="Create">create</a> your own collection after registering on the site!
+    </p>
+}
+else
+{
+    <h1 class="display-6 mb-2">Results for your "@ViewData["SearchString"]" search query.</h1>
+    @if (Model.Items.Count == 0)
+    {
+        <h2 class="display-6 mt-2">No results for collection items</h2>
+    }
+    else
+    {
+        <h2 class="display-6 mt-2">Items:</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Item name</th>
+                    <th scope="col">Collection Name</th>
+                    <th scope="col">Creation Date</th>
+                    <th scope="col">String fields</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var index = 0;
+                    @foreach (var item in Model.Items)
+                    {
+                        index++;
+                        <tr>
+                            <th scope="row">@index</th>
+                            <td><a asp-controller="Item" asp-action="Index" asp-route-itemId="@item.ItemId">@item.Name</a></td>
+                            <td>
+                                <a asp-controller="Collection" asp-action="getCollection" asp-route-collectionId="@item.CollectionId">
+                                    @item.CollectionName
+                                </a>
+                            </td>
+                            <td>
+                                <div class="text-end">
+                                    @item.CreationDate.ToShortDateString()
+                                </div>
+                                <div class="text-end text-secondary small">
+                                    @item.CreationDate.ToShortTimeString()
+                                </div>
+                            </td>
+                            <td>
+                                <ul class="list-group">
+                                    @foreach (var sf in item.StringFields)
+                                    {
+                                        <li class="list-group-item list-group-item-info">
+                                            @sf.FieldName - @sf.Value
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                        foreach (var tf in item.TextFields)
+                        {
+                            <tr>
+                                <td colspan="5" class="p-1 px-2">
+                                    <p class="fw-bold mb-1">@tf.FieldName - Text Field</p>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            @tf.Value
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    }
+    @if (Model.Collections.Count == 0)
+    {
+        <h2 class="display-6 mt-2">No results for user collections</h2>
+    }
+    else
+    {
+        <h2 class="display-6 mt-2">Collections:</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Collection name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Desctiption</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                    var index2 = 0;
+                    foreach (var collection in Model.Collections)
+                    {
+                        index2++;
+                        <tr>
+                            <th scope="row">@index2</th>
+                            <td>
+                                <a class="" asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@collection.CollectionId">
+                                    @collection.CollectionName
+                                </a>
+                            </td>
+                            <td>@collection.CategoryName</td>
+                            <td>@collection.Description</td>
+                            <td>
+                                <div class="text-end">
+                                    @collection.CreationDate.ToShortDateString()
+                                </div>
+                                <div class="text-end text-secondary small">
+                                    @collection.CreationDate.ToShortTimeString()
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+
+}
