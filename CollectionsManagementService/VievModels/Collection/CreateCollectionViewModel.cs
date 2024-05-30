@@ -1,7 +1,7 @@
 ﻿using DataORMLayer.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace CollectionsManagementService.VievModels;
+namespace CollectionsManagementService.VievModels.Collection;
 
 public class CreateCollectionViewModel
 {
@@ -16,12 +16,14 @@ public class CreateCollectionViewModel
         ConfigureCollectionFields();
     }
 
-    public CollectionFieldViewModel[] CollectionFields { get; set; } 
+    public CollectionFieldViewModel[] CollectionFields { get; set; }
         = new CollectionFieldViewModel[oneTypeCustomFields * typesOfCustomFields];
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string CategoryId { get; set; } = string.Empty;
     public IEnumerable<SelectListItem> Categories { get; set; } = [];
+    public IFormFile Image { get; set; }
+    public string? ImageUrl { get; set; }
 
     private void ConfigureCollectionFields()
     {

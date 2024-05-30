@@ -8,6 +8,7 @@ using DataORMLayer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace CollectionsManagementService.Areas.Identity.Pages.Account
 {
@@ -41,6 +42,10 @@ namespace CollectionsManagementService.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [Display(Name = "Your name or nickname.")]
+            public string UserName { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -65,10 +70,13 @@ namespace CollectionsManagementService.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 await _userManager.CreateAsync(user, Input.Password);
+                var userRole = new Claim("role", "user");
+                var userName = new Claim("username", Input.UserName);
+                await _userManager.AddClaimAsync(user, userRole);
+                await _userManager.AddClaimAsync(user, userName);
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return LocalRedirect(returnUrl);
             }

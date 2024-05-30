@@ -1,6 +1,6 @@
-﻿@model CollectionsManagementService.VievModels.CreateCollectionViewModel
+﻿@model CollectionsManagementService.VievModels.Collection.CreateCollectionViewModel
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="col-5">
         <div class="form-group">
             <label asp-for="Name">Collection name:</label>
@@ -16,6 +16,10 @@
             <label>Choose the category of your collection</label>
             <select class="form-control dropdown" asp-for="CategoryId" asp-items="Model.Categories">
             </select>
+        </div>
+        <div class="form-label">
+            <label>You can upload an image for your collection</label>
+            <input asp-for="Image" class="form-control" type="file" />
         </div>
         <div class="form-control">
             @for (var i = 0; i < Model.CollectionFields.Length; i++)

@@ -71,6 +71,7 @@ public class CollectionRepository : ICollectionRepository
                 .ThenInclude(field => field.CollectionField)
             .Include(coll => coll.Items)
                 .ThenInclude(item => item.BooleanFields)
+                .ThenInclude(field => field.CollectionField)
             .Include(coll => coll.CollectionFields)
             .Include(coll => coll.Category)
             .Include(coll => coll.ApplicationUser)
@@ -87,10 +88,14 @@ public class CollectionRepository : ICollectionRepository
             throw new ArgumentException("The collection was not found by Id", nameof(collection));
         oldCollection.Name = collection.Name;
         oldCollection.Description = collection.Description;
-        foreach (var oldField in oldCollection.CollectionFields)
+        oldCollection.ImageUrl = collection.ImageUrl;
+        if (collection.CollectionFields != null)
         {
-            var updatedField = collection.CollectionFields.First(x => x.CollectionFieldId == oldField.CollectionFieldId);
-            oldField.FieldName = updatedField.FieldName;
+            foreach (var oldField in oldCollection.CollectionFields)
+            {
+                var updatedField = collection.CollectionFields.First(x => x.CollectionFieldId == oldField.CollectionFieldId);
+                oldField.FieldName = updatedField.FieldName;
+            }
         }
 
         await _context.SaveChangesAsync();
@@ -103,5 +108,66 @@ public class CollectionRepository : ICollectionRepository
             throw new ArgumentException("The collection was not found by Id", nameof(collectionId));
         _context.Collections.Remove(collection);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Collection>> GetLargestCollectionsAsync(int number = 5)
+    {
+        return await _context.Collections
+            .OrderByDescending(c => c.Items.Count)
+            .Take(number)
+            .Include(c => c.CollectionFields)
+            .Include(c => c.Category)
+            .Include(c => c.Items)
+            .ToListAsync();
+    }
+
+    public async Task<List<Collection>> GetSortedCollectionsAsync(string sortOrder, int? categoryId)
+    {
+        var collections = _context.Collections.AsQueryable();
+        if (categoryId.HasValue)
+        {
+            collections = collections.Where(c  => c.CategoryId == categoryId);
+        }
+
+        collections = sortOrder switch
+        {
+            "name_desc" => collections.OrderByDescending(c => c.Name),
+            "name" => collections.OrderBy(c => c.Name),
+            "date" => collections.OrderBy(c => c.CreationDate),
+            _ => collections.OrderByDescending(c => c.CreationDate),
+        };
+
+        return await collections
+            .Include(c => c.CollectionFields)
+            .Include(c => c.Category)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<List<Collection>> GetResultFromSearchAsync(string searchString)
+    {
+        var collectionFieldsIds = await _context.CollectionFields
+            .Where(cf => EF.Functions.FreeText(cf.FieldName, $"\"{searchString}\""))
+            .Select(cf => cf.CollectionId)
+            .ToListAsync();
+
+        var collectionsIds = await _context.Collections
+            .Where(c => EF.Functions.FreeText(c.Description, $"\"{searchString}\"") ||
+                EF.Functions.FreeText(c.Category.Name, $"\"{searchString}\""))
+            .Select(c => c.CollectionId)
+            .ToListAsync();
+
+        collectionFieldsIds.AddRange(collectionsIds);
+        var uniqueIds = collectionFieldsIds.Distinct();
+
+        var data = await _context.Collections
+            .Where(c => uniqueIds.Contains(c.CollectionId))
+        .Include(c => c.CollectionFields)
+        .Include(c => c.Category)
+        .OrderByDescending(c => c.CreationDate)
+        .AsNoTracking()
+        .ToListAsync();
+
+        return data;
     }
 }

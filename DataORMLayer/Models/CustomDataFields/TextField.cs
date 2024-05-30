@@ -10,7 +10,7 @@ public class TextField : IItemField<string>
     public Guid CollectionFieldId { get; set; }
     public Guid ItemId { get; set; }
     [Required]
-    [MaxLength(512)]
+    [MaxLength(1024)]
     public string Value { get; set; }
 
     public CollectionField CollectionField { get; set; }

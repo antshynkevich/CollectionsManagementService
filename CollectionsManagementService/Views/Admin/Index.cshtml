@@ -1,0 +1,45 @@
+﻿@model List<CollectionsManagementService.VievModels.UserViewModel>
+
+<h1>Hello from admin page</h1>
+<div>
+    <table class="table table-light table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>User e-mail</th>
+                <th>Is admin?</th>
+                <th>Is blocked?</th>
+                <th>Control</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0, j = 1; i < Model.Count; i++, j++)
+            {
+                <tr>
+                    <td>@j</td>
+                    <td>
+                        @Model[i].UserName
+                        <p class="small text-black-50 py-0 my-0">@Model[i].UserId</p>
+                    </td>
+                    <td>
+                        @Model[i].UserEmail
+                    </td>
+                    <td>
+                        @Model[i].IsAdmin
+                    </td>
+                    <td>
+                        @Model[i].IsBlocked
+                    </td>
+                    <td>
+                        <form method="post">
+                            <button class="btn btn-outline-dark btn-sm" asp-controller="Admin" asp-action="ChangeBlocking" asp-route-userId="@Model[i].UserId" type="submit">Block</button>
+                            <button class="btn btn-outline-dark btn-sm" asp-controller="Admin" asp-action="ChangeRole" asp-route-userId="@Model[i].UserId" type="submit">Role</button>
+                            <button class="btn btn-outline-danger btn-sm" asp-action="DeleteUser" asp-route-userId="@Model[i].UserId" type="submit">Del</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

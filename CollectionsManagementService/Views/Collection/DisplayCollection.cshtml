@@ -1,12 +1,34 @@
-﻿@using CollectionsManagementService.VievModels
+﻿@using CollectionsManagementService.VievModels.Collection
 @using DataORMLayer.Models
 @model DetailedCollectionViewModel
 
-<h1>The @Model.CollectionName collection</h1>
-<div>@Model.Description</div>
-<div>Category - @Model.CategoryName</div>
-<p>Created by - @Model.UserName</p>
+<div class="container">
+    <h1 class="col-8">The @Model.CollectionName collection</h1>
+    <div class="row my-3">
+        <div class="col-6">
+            <div class="border p-3">
+                <div>@Model.Description</div>
+                <div>Category - @Model.CategoryName</div>
+                <p>Created by - @Model.UserName</p>
+                <a class="btn btn-outline-primary" asp-controller="Collection" asp-action="UpdateCollection" asp-route-collectionId="@Model.CollectionId">
+                    Change this collection
+                </a>
+                <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
+                    Add new item
+                </a>
+            </div>
 
+        </div>
+        @if (Model.ImageUrl != null)
+        {
+            <div class="col-4">
+                <div class="img-thumbnail">
+                    <img src="@Model.ImageUrl" alt="The image of the @Model.CollectionName collection" class="img-fluid" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
 <h3>Custom fields of the @Model.CollectionName collection</h3>
 <div>
     <table class="table table-light table-bordered border border-1">
@@ -14,7 +36,7 @@
             <th>Field type label</th>
             @foreach (var customField in Model.CustomCollectionFields)
             {
-                <td>@customField.FildTypeName</td>
+                <td>@customField.FieldTypeName</td>
             }
         </tr>
         <tr>
@@ -45,38 +67,52 @@
             {
                 <tr>
                     <td>@index</td>
-                    <td>@item.ItemName</td>
                     <td>
-                        @foreach (var customField in item.StringFields)
-                        {
-                            <span>
-                                @customField.FieldName - 
-                                @customField.Value
-                            </span>
-                        }
+                        <a asp-controller="Item" asp-action="Index" asp-route-itemId="@item.ItemId">
+                            @item.ItemName
+                        </a>
                     </td>
                     <td>
-                        @foreach (var customField in item.IntegerFields)
-                        {
-                            <span>
-                                @customField.FieldName -
-                                @customField.Value
-                            </span>
-                        }
+                        <ul class="my-0">
+                            @foreach (var customField in item.StringFields)
+                            {
+                                <li>
+                                    @customField.FieldName -
+                                    @customField.Value
+                                </li>
+                            }
+                        </ul>
                     </td>
                     <td>
-                        @foreach (var customField in item.DateFields)
-                        {
-                            <span>
+                        <ul>
+                            @foreach (var customField in item.IntegerFields)
+                            {
+                                <li>
+                                    @customField.FieldName -
+                                    @customField.Value
+                                </li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            @foreach (var customField in item.DateFields)
+                            {
+                                <li>
 
-                                @customField.FieldName -
-                                @customField.Value
-                            </span>
-                        }
+                                    @customField.FieldName -
+                                    @customField.Value
+                                </li>
+                            }
+                        </ul>
+
                     </td>
                 </tr>
                 index++;
             }
         </tbody>
     </table>
+    <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
+        Add new item
+    </a>
 </div>

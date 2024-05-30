@@ -13,6 +13,10 @@ public class Collection
     [MaxLength(512)]
     public string Description { get; set; }
     public string UserId { get; set; }
+    [MaxLength(128)]
+    public string? ImageUrl { get; set; }
+    [Column(TypeName = "datetime2")]
+    public DateTime CreationDate { get; set; }
 
     public Category Category { get; set; }
     public ICollection<Item> Items { get; set; }

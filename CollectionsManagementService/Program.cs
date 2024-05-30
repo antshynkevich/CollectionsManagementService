@@ -4,6 +4,9 @@ using DataORMLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using CollectionsManagementService.Services;
+using CollectionsManagementService.Services.Interfaces;
+using CloudinaryDotNet;
+using CollectionsManagementService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,15 +28,32 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddScoped<IModelMapper, ModelMapper>();
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("AdminsOnly", policy => {
+        policy.RequireClaim("role", "admin");
+        policy.RequireAuthenticatedUser();
+    });
+    options.AddPolicy("UserNotBlocked", policy => { 
+        policy.RequireAuthenticatedUser();
+        policy.RequireAssertion(context => !context.User.HasClaim(c => c.Type == "blocked" || c.Value == "blocked"));
+    });
+});
+
+builder.Services.AddSingleton<ICollectionMapper, CollectionMapper>();
+builder.Services.AddSingleton<IItemMapper, ItemMapper>();
 builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<ICloudService, CloudService>();
 builder.Services.AddScoped<CategoryRepository>();
+
+var cloudinary = new Cloudinary("cloudinary://267417229445433:t2vEgh1RxVe9lqlV7HMqbPmQV1U@dedob71th");
+builder.Services.AddSingleton(cloudinary);
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var userManager = (UserManager<ApplicationUser>)scope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>));
+    var userManager = scope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>)) as UserManager<ApplicationUser>;
     await ApplicationDbInitializer.SeedUsers(userManager);
 }
 
@@ -43,6 +63,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 
+await app.SeedServerWithDataAsync();
 app.UseStaticFiles();
 
 app.UseRouting();

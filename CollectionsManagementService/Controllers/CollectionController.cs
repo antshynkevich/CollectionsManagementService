@@ -1,5 +1,6 @@
 ﻿using CollectionsManagementService.Services;
-using CollectionsManagementService.VievModels;
+using CollectionsManagementService.Services.Interfaces;
+using CollectionsManagementService.VievModels.Collection;
 using DataORMLayer.Models;
 using DataORMLayer.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -8,30 +9,50 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsManagementService.Controllers;
 
-[Authorize]
+[Authorize(Policy = "UserNotBlocked")]
 [Route("[controller]/[action]")]
 public class CollectionController : Controller
 {
     private readonly ICollectionRepository _collectionRepository;
     private readonly CategoryRepository _categoryRepository;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IModelMapper _modelMapper;
+    private readonly ICollectionMapper _collectionMapper;
+    private readonly ICloudService _cloudService;
 
     public CollectionController(ICollectionRepository collectionRepository,
         UserManager<ApplicationUser> userManager,
-        IModelMapper modelMapper,
-        CategoryRepository categoryRepository)
+        ICollectionMapper collectionMapper,
+        CategoryRepository categoryRepository,
+        ICloudService cloudService)
     {
         _collectionRepository = collectionRepository;
         _userManager = userManager;
-        _modelMapper = modelMapper;
+        _collectionMapper = collectionMapper;
         _categoryRepository = categoryRepository;
+        _cloudService = cloudService;
     }
 
+    [AllowAnonymous]
+    [HttpGet]
+    public async Task<IActionResult> Index(string sortOrder, int? categoryId)
+    {
+        ViewData["DateSortParm"] = (string.IsNullOrEmpty(sortOrder) || sortOrder == "date_desc") ? "date" : "date_desc";
+        ViewData["NameSortParm"] = sortOrder == "name" ? "name_desc" : "name";
+        ViewData["Category"] = categoryId;
+        Helper.SortSignHelper(sortOrder, out string? nameSign, out string? dateSing);
+        ViewData["NameSign"] = nameSign;
+        ViewData["DateSign"] = dateSing;
+        
+        var sortedCollections = await _collectionRepository.GetSortedCollectionsAsync(sortOrder, categoryId);
+        var allCollectionsVm = _collectionMapper.MapToCollectionViewModelList(sortedCollections);
+        var categories = await _categoryRepository.GetAllCategoriesAsync();
+        return View(new CollectionFilteredViewModel(categories, allCollectionsVm));
+    }
+
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetCollection(string collectionId)
     {
-        await Console.Out.WriteLineAsync($"collection id = {collectionId}");
         var collection = await _collectionRepository.GetWithItemsByIdAsync(Guid.Parse(collectionId));
         if (collection == null)
         {
@@ -39,7 +60,7 @@ public class CollectionController : Controller
             //TODO: throw not found
         }
 
-        var detailedCollectionVm = _modelMapper.MapToDetailedCollection(collection);
+        var detailedCollectionVm = _collectionMapper.MapToDetailedCollection(collection);
         return View("DisplayCollection", detailedCollectionVm);
     }
 
@@ -48,31 +69,29 @@ public class CollectionController : Controller
     {
         var currentUser = await _userManager.GetUserAsync(User);
         var userCollections = await _collectionRepository.GetCollectionsByUserIdAsync(currentUser.Id);
-        var userCollectionsVM = _modelMapper.MapToCollectionViewModelList(userCollections);
+        var userCollectionsVM = _collectionMapper.MapToCollectionViewModelList(userCollections);
         return View("MyCollections", userCollectionsVM);
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
-    {
-        //TODO: rewrite or delete this method
-        var collectionsWithFields = await _collectionRepository.GetAllAsync();
-        return View(collectionsWithFields);
-    }
-
-    [HttpGet("/[controller]/create")]
-    public async Task<IActionResult> CreateCollection()
+    public async Task<IActionResult> Create()
     {
         var categories = await _categoryRepository.GetAllCategoriesAsync();
         var viewModel = new CreateCollectionViewModel(categories);
-        return View("Create", viewModel);
+        return View(viewModel);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCollection(CreateCollectionViewModel viewModel)
+    public async Task<IActionResult> Create(CreateCollectionViewModel viewModel)
     {
+        if (viewModel.Image != null)
+        {
+            var result = await _cloudService.AddImageAsync(viewModel.Image);
+            viewModel.ImageUrl = result.Url.ToString();
+        }
+
         var currentUser = await _userManager.GetUserAsync(User);
-        var collection = _modelMapper.MapToCollection(viewModel, currentUser.Id);
+        var collection = _collectionMapper.MapToCollection(viewModel, currentUser.Id);
         await _collectionRepository.AddAsync(collection);
         return RedirectToAction("Index");
     }
@@ -87,14 +106,25 @@ public class CollectionController : Controller
             //TODO: throw not found
         }
 
-        var collectoinVM = _modelMapper.MapToUpdateCollectionVM(collection);
+        var collectoinVM = _collectionMapper.MapToUpdateCollectionVM(collection);
         return View(collectoinVM);
     }
 
     [HttpPost("/[controller]/update/{collectionId}")]
     public async Task<IActionResult> UpdateCollection(UpdateCollectionViewModel collectionViewModel)
     {
-        var collectionUpdated = _modelMapper.MapToCollection(collectionViewModel);
+        if (collectionViewModel.Image != null)
+        {
+            if (!string.IsNullOrEmpty(collectionViewModel.ImageUrl))
+            {
+                await _cloudService.DeleteImageAsync(collectionViewModel.ImageUrl);
+            }
+
+            var result = await _cloudService.AddImageAsync(collectionViewModel.Image);
+            collectionViewModel.ImageUrl = result.Url.ToString();
+        }
+
+        var collectionUpdated = _collectionMapper.MapToCollection(collectionViewModel);
         await _collectionRepository.UpdateCollectionAsync(collectionUpdated);
         return RedirectToAction(nameof(GetCollection), new { collectionId = collectionViewModel.CollectionId });
     }
@@ -102,7 +132,6 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> DeleteCollection(string collectionId)
     {
-        await Console.Out.WriteLineAsync("collectionId = " + collectionId);
         try
         {
             await _collectionRepository.DeleteCollectionAsync(Guid.Parse(collectionId));

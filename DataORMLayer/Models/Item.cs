@@ -1,5 +1,6 @@
 ﻿using DataORMLayer.Models.CustomDataFields;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataORMLayer.Models;
 
@@ -10,6 +11,8 @@ public class Item
     [MaxLength(64)]
     public string Name { get; set; }
     public Guid CollectionId { get; set; }
+    [Column(TypeName = "datetime2")]
+    public DateTime CreationDate { get; set; }
 
     public Collection Collection { get; set; }
     public ICollection<Tag> Tags { get; set; }
@@ -18,4 +21,6 @@ public class Item
     public ICollection<TextField> TextFields { get; set; }
     public ICollection<BooleanField> BooleanFields { get; set; }
     public ICollection<DateField> DateFields { get; set; }
+    public ICollection<UserComment> UserComments { get; set; }
+    public ICollection<UserLike> UserLikes { get; set; }
 }

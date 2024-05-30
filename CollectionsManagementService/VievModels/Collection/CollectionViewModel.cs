@@ -1,12 +1,11 @@
-﻿using DataORMLayer.Models;
+﻿namespace CollectionsManagementService.VievModels.Collection;
 
-namespace CollectionsManagementService.VievModels;
-
-public class UserCollectionViewModel
+public class CollectionViewModel
 {
     public Guid CollectionId { get; set; }
     public string CollectionName { get; set; }
     public string Description { get; set; }
     public string CategoryName { get; set; }
+    public DateTime CreationDate { get; set; }
     public List<CollectionFieldViewModel> CustomCollectionFields { get; set; } = [];
 }

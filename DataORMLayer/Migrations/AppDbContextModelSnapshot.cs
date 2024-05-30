@@ -102,7 +102,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -118,7 +118,7 @@ namespace DataORMLayer.Migrations
                         new
                         {
                             CategoryId = 3,
-                            Name = "Clothes"
+                            Name = "Electronic Devices and Gadgets"
                         },
                         new
                         {
@@ -133,12 +133,12 @@ namespace DataORMLayer.Migrations
                         new
                         {
                             CategoryId = 6,
-                            Name = "Music Albums, Clips, and Records"
+                            Name = "Clothes"
                         },
                         new
                         {
                             CategoryId = 7,
-                            Name = "Firearms"
+                            Name = "Music Albums, Clips, and Records"
                         },
                         new
                         {
@@ -147,7 +147,17 @@ namespace DataORMLayer.Migrations
                         },
                         new
                         {
-                            CategoryId = 99,
+                            CategoryId = 9,
+                            Name = "Dish Recipes"
+                        },
+                        new
+                        {
+                            CategoryId = 10,
+                            Name = "Products and Services Reviews"
+                        },
+                        new
+                        {
+                            CategoryId = 11,
                             Name = "Other"
                         });
                 });
@@ -161,10 +171,17 @@ namespace DataORMLayer.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -181,25 +198,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Collections");
-
-                    b.HasData(
-                        new
-                        {
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            CategoryId = 1,
-                            Description = "The description of the \"IMDb top 10 movies\" collection",
-                            Name = "IMDb top 10 movies",
-                            UserId = "7D9B7113-A8F8-4035-99A7-A20DD400F6A3"
-                        },
-                        new
-                        {
-                            CollectionId = new Guid("c2255774-5eaa-4ba2-973d-59a0ddab4fd3"),
-                            CategoryId = 2,
-                            Description = "A Torah, a Bible, and a Qur’an",
-                            Name = "Art of Three Faiths",
-                            UserId = "7D9B7113-A8F8-4035-99A7-A20DD400F6A3"
-                        });
+                    b.ToTable("Collections", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CollectionField", b =>
@@ -224,37 +223,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("CollectionFields");
-
-                    b.HasData(
-                        new
-                        {
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            FieldName = "Movie Title",
-                            FieldType = "String"
-                        },
-                        new
-                        {
-                            CollectionFieldId = new Guid("31183a51-fdd9-4d70-a6bc-ad81ccc9616a"),
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            FieldName = "IMDb Score",
-                            FieldType = "Integer"
-                        },
-                        new
-                        {
-                            CollectionFieldId = new Guid("0eb65c24-a088-4ea3-a516-748f23b8c4fc"),
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            FieldName = "Relise date",
-                            FieldType = "Date"
-                        },
-                        new
-                        {
-                            CollectionFieldId = new Guid("4ac59045-c266-42f7-83d1-90d662c70d50"),
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            FieldName = "Move plot",
-                            FieldType = "Text"
-                        });
+                    b.ToTable("CollectionFields", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.BooleanField", b =>
@@ -278,7 +247,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("BooleanFields");
+                    b.ToTable("BooleanFields", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.DateField", b =>
@@ -293,7 +262,7 @@ namespace DataORMLayer.Migrations
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Value")
+                    b.Property<DateOnly>("Value")
                         .HasColumnType("date");
 
                     b.HasKey("DateFieldId");
@@ -302,30 +271,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("DateFields");
-
-                    b.HasData(
-                        new
-                        {
-                            DateFieldId = new Guid("39c75b2e-a926-41c8-bfde-3c23cb347078"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("cbe77005-a0a5-4801-96d4-e0014ec9d7d6"),
-                            Value = new DateTime(1994, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            DateFieldId = new Guid("1175037b-c5f6-4685-b85b-5ca5de399f26"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("6f4d4ac6-2821-44a5-b8d0-d3351347a251"),
-                            Value = new DateTime(1972, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            DateFieldId = new Guid("40a111ae-352b-4c38-96ac-343d52bcb8b6"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("62b2c231-6cc2-43aa-bd50-d0ad23dd4afe"),
-                            Value = new DateTime(2008, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
+                    b.ToTable("DateFields", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.IntegerField", b =>
@@ -349,30 +295,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("IntegerFields");
-
-                    b.HasData(
-                        new
-                        {
-                            IntegerFieldId = new Guid("69762eb8-d70e-41fd-8f97-3564231a3439"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("cbe77005-a0a5-4801-96d4-e0014ec9d7d6"),
-                            Value = 93
-                        },
-                        new
-                        {
-                            IntegerFieldId = new Guid("0cfbf1b1-dcde-4942-8f82-787f4e82e133"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("6f4d4ac6-2821-44a5-b8d0-d3351347a251"),
-                            Value = 92
-                        },
-                        new
-                        {
-                            IntegerFieldId = new Guid("7bed4ab8-c6c5-41de-a901-ee4a9f0b02cb"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("62b2c231-6cc2-43aa-bd50-d0ad23dd4afe"),
-                            Value = 90
-                        });
+                    b.ToTable("IntegerFields", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.StringField", b =>
@@ -398,30 +321,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("StringFields");
-
-                    b.HasData(
-                        new
-                        {
-                            StringFieldId = new Guid("8a724c23-b070-4bb8-9236-494782ede9f3"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("cbe77005-a0a5-4801-96d4-e0014ec9d7d6"),
-                            Value = "The Shawshank Redemption"
-                        },
-                        new
-                        {
-                            StringFieldId = new Guid("c1af57aa-a7cc-4de5-b73f-06597d413d4a"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("6f4d4ac6-2821-44a5-b8d0-d3351347a251"),
-                            Value = "The Godfather"
-                        },
-                        new
-                        {
-                            StringFieldId = new Guid("981ae0b9-570e-4bd8-aabc-4fbd008efcff"),
-                            CollectionFieldId = new Guid("4eb4a691-e619-4f1a-b3c7-9ce2538f008d"),
-                            ItemId = new Guid("62b2c231-6cc2-43aa-bd50-d0ad23dd4afe"),
-                            Value = "The Dark Knight"
-                        });
+                    b.ToTable("StringFields", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.CustomDataFields.TextField", b =>
@@ -438,8 +338,8 @@ namespace DataORMLayer.Migrations
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
 
                     b.HasKey("TextFieldId");
 
@@ -447,30 +347,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("TextFields");
-
-                    b.HasData(
-                        new
-                        {
-                            TextFieldId = new Guid("81f2fb1a-9a85-4098-a752-84b244a71b94"),
-                            CollectionFieldId = new Guid("4ac59045-c266-42f7-83d1-90d662c70d50"),
-                            ItemId = new Guid("cbe77005-a0a5-4801-96d4-e0014ec9d7d6"),
-                            Value = "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion."
-                        },
-                        new
-                        {
-                            TextFieldId = new Guid("46aac2de-feef-42c2-ac84-2aa766cfc527"),
-                            CollectionFieldId = new Guid("4ac59045-c266-42f7-83d1-90d662c70d50"),
-                            ItemId = new Guid("6f4d4ac6-2821-44a5-b8d0-d3351347a251"),
-                            Value = "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son."
-                        },
-                        new
-                        {
-                            TextFieldId = new Guid("d2f00405-3022-4bd5-8213-9b5ebbc1e6d5"),
-                            CollectionFieldId = new Guid("4ac59045-c266-42f7-83d1-90d662c70d50"),
-                            ItemId = new Guid("62b2c231-6cc2-43aa-bd50-d0ad23dd4afe"),
-                            Value = "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice."
-                        });
+                    b.ToTable("TextFields", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Item", b =>
@@ -482,6 +359,9 @@ namespace DataORMLayer.Migrations
                     b.Property<Guid>("CollectionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -491,27 +371,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("Items");
-
-                    b.HasData(
-                        new
-                        {
-                            ItemId = new Guid("cbe77005-a0a5-4801-96d4-e0014ec9d7d6"),
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            Name = "First position"
-                        },
-                        new
-                        {
-                            ItemId = new Guid("6f4d4ac6-2821-44a5-b8d0-d3351347a251"),
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            Name = "Second position"
-                        },
-                        new
-                        {
-                            ItemId = new Guid("62b2c231-6cc2-43aa-bd50-d0ad23dd4afe"),
-                            CollectionId = new Guid("eff0aef6-6bdb-46b6-a3d2-0b95cee5627b"),
-                            Name = "3rd position"
-                        });
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Tag", b =>
@@ -527,7 +387,62 @@ namespace DataORMLayer.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
+                });
+
+            modelBuilder.Entity("DataORMLayer.Models.UserComment", b =>
+                {
+                    b.Property<Guid>("UserCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserCommentId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserComments", (string)null);
+                });
+
+            modelBuilder.Entity("DataORMLayer.Models.UserLike", b =>
+                {
+                    b.Property<Guid>("UserLikeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LikeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserLikeId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLikes", (string)null);
                 });
 
             modelBuilder.Entity("ItemTag", b =>
@@ -542,7 +457,7 @@ namespace DataORMLayer.Migrations
 
                     b.HasIndex("TagsTagId");
 
-                    b.ToTable("ItemTag");
+                    b.ToTable("ItemTag", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -818,6 +733,44 @@ namespace DataORMLayer.Migrations
                     b.Navigation("Collection");
                 });
 
+            modelBuilder.Entity("DataORMLayer.Models.UserComment", b =>
+                {
+                    b.HasOne("DataORMLayer.Models.Item", "Item")
+                        .WithMany("UserComments")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataORMLayer.Models.ApplicationUser", "User")
+                        .WithMany("UserComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DataORMLayer.Models.UserLike", b =>
+                {
+                    b.HasOne("DataORMLayer.Models.Item", "Item")
+                        .WithMany("UserLikes")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataORMLayer.Models.ApplicationUser", "User")
+                        .WithMany("UserLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ItemTag", b =>
                 {
                     b.HasOne("DataORMLayer.Models.Item", null)
@@ -887,6 +840,10 @@ namespace DataORMLayer.Migrations
             modelBuilder.Entity("DataORMLayer.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Collections");
+
+                    b.Navigation("UserComments");
+
+                    b.Navigation("UserLikes");
                 });
 
             modelBuilder.Entity("DataORMLayer.Models.Category", b =>
@@ -912,6 +869,10 @@ namespace DataORMLayer.Migrations
                     b.Navigation("StringFields");
 
                     b.Navigation("TextFields");
+
+                    b.Navigation("UserComments");
+
+                    b.Navigation("UserLikes");
                 });
 #pragma warning restore 612, 618
         }

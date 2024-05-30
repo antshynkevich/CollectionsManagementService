@@ -1,0 +1,94 @@
+﻿@using CollectionsManagementService.VievModels.Item;
+@model CreateItemViewModel
+
+<h1>Add an item to your own collection!</h1>
+<div>
+    <form method="post">
+        <div class="col-5">
+            <div class="form-group">
+                <label asp-for="Name">Item name:</label>
+                <input class="form-control" asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div>
+                <input type="hidden" asp-for="CollectionId" />
+            </div>
+            @if (Model.StringFields != null && Model.StringFields.Count > 0)
+            {
+                <div class="form-control">
+                    @for (var i = 0; i < Model.StringFields.Count; i++)
+                    {
+                        var label = $"{Model.StringFields[i].FieldName} - {Model.StringFields[i].FieldType}";
+                        <div class="form-group">
+                            <label asp-for="StringFields[i].Value">@label:</label>
+                            <input class="form-control" type="text" asp-for="StringFields[i].Value" />
+                            <span asp-validation-for="StringFields[i].Value"></span>
+                            <input type="hidden" asp-for="StringFields[i].CollectionFieldId" />
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.IntegerFields != null && Model.IntegerFields.Count > 0)
+            {
+                <div class="form-control">
+                    @for (var i = 0; i < Model.IntegerFields.Count; i++)
+                    {
+                        var label = $"{Model.IntegerFields[i].FieldName} - {Model.IntegerFields[i].FieldType}";
+                        <div class="form-group">
+                            <label asp-for="IntegerFields[i].Value">@label:</label>
+                            <input class="form-control" type="number" asp-for="IntegerFields[i].Value" />
+                            <span asp-validation-for="IntegerFields[i].Value"></span>
+                            <input type="hidden" asp-for="IntegerFields[i].CollectionFieldId" />
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.DateFields != null && Model.DateFields.Count > 0)
+            {
+                <div class="form-control">
+                    @for (var i = 0; i < Model.DateFields.Count; i++)
+                    {
+                        var label = $"{Model.DateFields[i].FieldName} - {Model.DateFields[i].FieldType}";
+                        <div class="form-group">
+                            <label asp-for="DateFields[i].Value">@label:</label>
+                            <input class="form-control" type="date" asp-for="DateFields[i].Value" />
+                            <span asp-validation-for="DateFields[i].Value"></span>
+                            <input type="hidden" asp-for="DateFields[i].CollectionFieldId" />
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.BoolFields != null && Model.BoolFields.Count > 0)
+            {
+                <div class="form-control">
+                    @for (var i = 0; i < Model.BoolFields.Count; i++)
+                    {
+                        var label = $"{Model.BoolFields[i].FieldName} - {Model.BoolFields[i].FieldType}";
+                        <div class="form-group">
+                            <label asp-for="BoolFields[i].Value">@label:</label>
+                            <input class="form-check" type="checkbox" asp-for="BoolFields[i].Value" />
+                            <span asp-validation-for="BoolFields[i].Value"></span>
+                            <input type="hidden" asp-for="BoolFields[i].CollectionFieldId" />
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.TextFields != null && Model.TextFields.Count > 0)
+            {
+                <div class="form-control">
+                    @for (var i = 0; i < Model.TextFields.Count; i++)
+                    {
+                        var label = $"{Model.TextFields[i].FieldName} - {Model.TextFields[i].FieldType}";
+                        <div class="form-group">
+                            <label asp-for="TextFields[i].Value">@label:</label>
+                            <input class="form-control" type="text" asp-for="TextFields[i].Value" />
+                            <span asp-validation-for="TextFields[i].Value"></span>
+                            <input type="hidden" asp-for="TextFields[i].CollectionFieldId" />
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <button class="btn btn-outline-success" type="submit">Add the item</button>
+    </form>
+</div>
