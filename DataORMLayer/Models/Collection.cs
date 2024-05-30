@@ -7,13 +7,13 @@ public class Collection
 {
     public Guid CollectionId { get; set; }
     [Required]
-    [MaxLength(64)]
+    [MaxLength(Constants.NameSize)]
     public string Name { get; set; }
     public int CategoryId { get; set; }
-    [MaxLength(512)]
+    [MaxLength(Constants.DescriptionSize)]
     public string Description { get; set; }
     public string UserId { get; set; }
-    [MaxLength(128)]
+    [MaxLength(Constants.UrlSize)]
     public string? ImageUrl { get; set; }
     [Column(TypeName = "datetime2")]
     public DateTime CreationDate { get; set; }

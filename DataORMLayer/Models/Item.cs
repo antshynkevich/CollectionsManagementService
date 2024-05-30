@@ -8,7 +8,7 @@ public class Item
 {
     public Guid ItemId { get; set; }
     [Required]
-    [MaxLength(64)]
+    [MaxLength(Constants.NameSize)]
     public string Name { get; set; }
     public Guid CollectionId { get; set; }
     [Column(TypeName = "datetime2")]

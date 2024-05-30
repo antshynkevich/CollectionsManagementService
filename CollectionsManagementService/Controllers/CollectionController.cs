@@ -84,6 +84,11 @@ public class CollectionController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(CreateCollectionViewModel viewModel)
     {
+        if (ModelState["CategoryId"]?.Errors.Count > 0)
+        {
+            return View(viewModel);
+        }
+
         if (viewModel.Image != null)
         {
             var result = await _cloudService.AddImageAsync(viewModel.Image);
@@ -125,6 +130,7 @@ public class CollectionController : Controller
         }
 
         var collectionUpdated = _collectionMapper.MapToCollection(collectionViewModel);
+        // TODO: add try catch
         await _collectionRepository.UpdateCollectionAsync(collectionUpdated);
         return RedirectToAction(nameof(GetCollection), new { collectionId = collectionViewModel.CollectionId });
     }

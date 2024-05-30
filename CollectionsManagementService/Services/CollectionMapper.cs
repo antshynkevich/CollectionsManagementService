@@ -27,7 +27,7 @@ public class CollectionMapper : ICollectionMapper
             Description = collectionVM.Description,
             CreationDate = DateTime.UtcNow,
             ImageUrl = collectionVM.ImageUrl,
-            CategoryId = int.Parse(collectionVM.CategoryId),
+            CategoryId = collectionVM.CategoryId,
             UserId = userId,
             CollectionFields = collectionFields
         };
@@ -45,14 +45,11 @@ public class CollectionMapper : ICollectionMapper
             ImageUrl= collectionVM.ImageUrl
         };
 
-        if (collection.CollectionFields != null)
+        collection.CollectionFields = collectionVM.CollectionFields.Select(x => new CollectionField
         {
-            collection.CollectionFields = collectionVM.CollectionFields.Select(x => new CollectionField
-            {
-                CollectionFieldId = x.FieldId,
-                FieldName = x.FieldName
-            }).ToList();
-        }
+            CollectionFieldId = x.FieldId,
+            FieldName = x.FieldName
+        }).ToList();
 
         return collection;
     }

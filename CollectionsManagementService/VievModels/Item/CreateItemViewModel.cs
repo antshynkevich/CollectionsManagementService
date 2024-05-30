@@ -1,10 +1,14 @@
-﻿namespace CollectionsManagementService.VievModels.Item;
+﻿using DataORMLayer;
+using System.ComponentModel.DataAnnotations;
+
+namespace CollectionsManagementService.VievModels.Item;
 
 public class CreateItemViewModel
 {
     public Guid CollectionId { get; set; }
+    [Required]
+    [MaxLength(Constants.NameSize)]
     public string Name { get; set; }
-    //public List<CollectionFieldViewModel> CollectionFields { get; set; }
     public List<ItemFieldWithIdViewModel<int>> IntegerFields { get; set; }
     public List<ItemFieldWithIdViewModel<string>> StringFields { get; set; }
     public List<ItemFieldWithIdViewModel<DateOnly>> DateFields { get; set; }

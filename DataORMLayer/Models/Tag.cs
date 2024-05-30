@@ -9,7 +9,7 @@ public class Tag
     [Key]
     public Guid TagId { get; set; }
     [Required]
-    [MaxLength(32)]
+    [MaxLength(Constants.TagSize)]
     public string Name { get; set; }
 
     public ICollection<Item> Items { get; set; }
