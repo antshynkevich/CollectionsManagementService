@@ -31,7 +31,7 @@ public class CreateCollectionViewModel
     [BindRequired]
     public int CategoryId { get; set; }
     public List<SelectListItem> Categories { get; set; } = [];
-    public IFormFile Image { get; set; }
+    public IFormFile? Image { get; set; }
     public string? ImageUrl { get; set; }
 
     private void ConfigureCollectionFields()
@@ -39,7 +39,7 @@ public class CreateCollectionViewModel
         int fieldsIndex = 0;
         foreach (var fieldType in (FieldType[])Enum.GetValues(typeof(FieldType)))
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < oneTypeCustomFields; i++)
             {
                 CollectionFields[fieldsIndex] = new CollectionFieldViewModel
                 {

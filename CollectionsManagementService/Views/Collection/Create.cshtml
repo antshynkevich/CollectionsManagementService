@@ -1,42 +1,55 @@
 ﻿@model CollectionsManagementService.VievModels.Collection.CreateCollectionViewModel
 
+<h2 class="display-5 ps-3 mb-3">Create your own collection on this page!</h2>
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <form method="post" enctype="multipart/form-data">
-    <div class="col-5">
-        <div class="form-group">
-            <label asp-for="Name">Collection name:</label>
-            <input class="form-control" asp-for="Name" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description">Collection description:</label>
-            <input class="form-control" asp-for="Description" />
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label>Choose the category of your collection</label>
-            <select class="form-control dropdown" asp-for="CategoryId" asp-items="Model.Categories">
-                <option value="" hidden disabled selected>-Select a category-</option>
-            </select>
-            <span asp-validation-for="CategoryId" class="text-danger">Select a collection category</span>
-        </div>
-        <div class="form-label">
-            <label>You can upload an image for your collection</label>
-            <input asp-for="Image" class="form-control" type="file" accept="image/jpg, image/jpeg, image/png, image/svg" />
-        </div>
-        <div class="form-control">
-            @for (var i = 0; i < Model.CollectionFields.Length; i++)
-            {
-                <div class="form-group">
-                    <input class="form-check-input" asp-for="CollectionFields[i].IsFieldNeeded" />
-                    <label asp-for="CollectionFields[i].FieldName">@Model.CollectionFields[i].FieldType Field @i:</label>
-                    <input class="form-control" asp-for="CollectionFields[i].FieldName" />
-                    <input type="hidden" asp-for="CollectionFields[i].FieldType" />
+    <div class="container">
+        <div class="row">
+            <div class="col-6 pe-3">
+                <div class="form-control shadow-sm">
+                    <label class="fw-light fs-5" asp-for="Name">Collection name:</label>
+                    <input class="form-control my-1" asp-for="Name" />
+                    <span asp-validation-for="Name" class="text-danger fw-light"></span>
                 </div>
-            }
+                <div class="form-control my-3 shadow-sm">
+                    <label class="fw-light fs-5" asp-for="Description">Collection description:</label>
+                    <input class="form-control my-1" asp-for="Description" />
+                    <span asp-validation-for="Description" class="text-danger fw-light"></span>
+                </div>
+                <div class="form-control my-3 shadow-sm">
+                    <label class="fw-light fs-5">Choose the category of your collection</label>
+                    <select class="form-control dropdown my-1" asp-for="CategoryId" asp-items="Model.Categories">
+                        <option value="" hidden disabled selected>-Select a category-</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger fw-light">Select a collection category</span>
+                </div>
+                <div class="form-control my-3 shadow-sm">
+                    <label class="fw-light fs-5">You can upload an image for your collection</label>
+                    <input asp-for="Image" class="form-control my-1" type="file" accept="image/jpg, image/jpeg, image/png, image/svg" />
+                </div>
+                <div class="text-end mt-1">
+                    <button class="btn btn-outline-success shadow-sm" type="submit">Create Collection</button>
+                    <a asp-controller="Collection" asp-action="ShowUserCollections" class="btn btn-outline-danger shadow-sm ms-2">Return</a>
+                </div>
+            </div>
+            <div class="form-control col shadow-sm">
+                <p class="lead fs-3">Set up your collection's custom fields:</p>
+                @for (var i = 0; i < Model.CollectionFields.Length; i++)
+                {
+                    var checkboxId = "checkbox" + i.ToString();
+                    var inputId = "input" + i.ToString();
+                    var numberByType = (i % 3) + 1;
+
+                    <div class="form-group my-3">
+                        <input onclick="enableCreateUser(@i)" id="@checkboxId" class="form-check-input" asp-for="CollectionFields[i].IsFieldNeeded" />
+                        <label class="fw-light fs-6 ms-1" asp-for="CollectionFields[i].FieldName">@Model.CollectionFields[i].FieldType field label #@numberByType:</label>
+                        <input disabled id="@inputId" class="form-control" asp-for="CollectionFields[i].FieldName" />
+                        <input type="hidden" asp-for="CollectionFields[i].FieldType" />
+                    </div>
+                }
+            </div>
         </div>
     </div>
-    <button class="btn btn-outline-success mt-3" type="submit">Create Collection</button>
 </form>
 
 <style>
@@ -44,3 +57,17 @@
         display: none;
     }
 </style>
+
+<script>
+    function enableCreateUser(i) {
+        if (document.getElementById("checkbox" + i).checked) {
+            const input = document.getElementById("input" + i);
+            input.disabled = false;
+            input.required = true;
+        } else {
+            const input = document.getElementById("input" + i);
+            elem.disabled = true;
+            elem.value = "";
+        }
+    }
+</script>
