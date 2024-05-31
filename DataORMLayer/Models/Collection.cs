@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataORMLayer.Models;
 
-public class Collection
+public class Collection : IUserIdContained
 {
     public Guid CollectionId { get; set; }
     [Required]

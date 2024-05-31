@@ -7,6 +7,8 @@ using CollectionsManagementService.Services;
 using CollectionsManagementService.Services.Interfaces;
 using CloudinaryDotNet;
 using CollectionsManagementService;
+using CollectionsManagementService.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,8 @@ builder.Services.AddAuthorization(options => {
         policy.RequireAuthenticatedUser();
         policy.RequireAssertion(context => !context.User.HasClaim(c => c.Type == "blocked" || c.Value == "blocked"));
     });
+    options.AddPolicy("CollectionOwnerOrAdminPolicy", policy =>
+        policy.Requirements.Add(new MustBeCollectionOwnerOrAdminRequirement()));
 });
 
 builder.Services.AddSingleton<ICollectionMapper, CollectionMapper>();
@@ -45,6 +49,7 @@ builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<ICloudService, CloudService>();
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddSingleton<IAuthorizationHandler, IsOwnerOrAdminHandler>();
 
 var cloudinary = new Cloudinary("cloudinary://267417229445433:t2vEgh1RxVe9lqlV7HMqbPmQV1U@dedob71th");
 builder.Services.AddSingleton(cloudinary);

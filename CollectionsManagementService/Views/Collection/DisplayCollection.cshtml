@@ -1,6 +1,11 @@
 ﻿@using CollectionsManagementService.VievModels.Collection
 @using DataORMLayer.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @model DetailedCollectionViewModel
+@{
+    var authorizationResult = await AuthorizationService.AuthorizeAsync(User, Model, "CollectionOwnerOrAdminPolicy");
+}
 
 <div class="container">
     <h1 class="col-8">The @Model.CollectionName collection</h1>
@@ -9,13 +14,16 @@
             <div class="border p-3">
                 <div>@Model.Description</div>
                 <div>Category - @Model.CategoryName</div>
-                <p>Created by - @Model.UserName</p>
-                <a class="btn btn-outline-primary" asp-controller="Collection" asp-action="UpdateCollection" asp-route-collectionId="@Model.CollectionId">
-                    Change this collection
-                </a>
-                <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
-                    Add new item
-                </a>
+                <div>Created by - @Model.UserName</div>
+                @if (authorizationResult.Succeeded)
+                {
+                    <a class="btn btn-outline-primary" asp-controller="Collection" asp-action="UpdateCollection" asp-route-collectionId="@Model.CollectionId">
+                        Change this collection
+                    </a>
+                    <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
+                        Add new item
+                    </a>
+                }
             </div>
 
         </div>
@@ -99,7 +107,6 @@
                             @foreach (var customField in item.DateFields)
                             {
                                 <li>
-
                                     @customField.FieldName -
                                     @customField.Value
                                 </li>
@@ -112,7 +119,10 @@
             }
         </tbody>
     </table>
-    <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
-        Add new item
-    </a>
+    @if (authorizationResult.Succeeded)
+    {
+        <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
+            Add new item
+        </a>
+    }
 </div>

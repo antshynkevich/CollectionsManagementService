@@ -109,6 +109,7 @@ public class CollectionMapper : ICollectionMapper
             ImageUrl = collection.ImageUrl,
             CollectionId = collection.CollectionId,
             CreationDate = collection.CreationDate,
+            UserId = collection.UserId,
             CustomCollectionFields = collection.CollectionFields
                 .Select(f => new CollectionFieldViewModel
                 {

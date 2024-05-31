@@ -18,18 +18,21 @@ public class CollectionController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICollectionMapper _collectionMapper;
     private readonly ICloudService _cloudService;
+    private readonly IAuthorizationService _authorizationService;
 
     public CollectionController(ICollectionRepository collectionRepository,
         UserManager<ApplicationUser> userManager,
         ICollectionMapper collectionMapper,
         CategoryRepository categoryRepository,
-        ICloudService cloudService)
+        ICloudService cloudService, 
+        IAuthorizationService authorizationService)
     {
         _collectionRepository = collectionRepository;
         _userManager = userManager;
         _collectionMapper = collectionMapper;
         _categoryRepository = categoryRepository;
         _cloudService = cloudService;
+        _authorizationService = authorizationService;
     }
 
     [AllowAnonymous]
@@ -104,12 +107,21 @@ public class CollectionController : Controller
     [HttpGet("/[controller]/update/{collectionId}")]
     public async Task<IActionResult> UpdateCollection(string collectionId)
     {
-        var collection = await _collectionRepository.GetCollectionByIdAsync(Guid.Parse(collectionId));
+        bool isValid = Guid.TryParse(collectionId, out Guid guidCollectionId);
+        if (!isValid) return NotFound();
+
+        var collection = await _collectionRepository.GetCollectionByIdAsync(guidCollectionId);
         if (collection == null)
         {
             return NotFound();
             //TODO: throw not found
         }
+
+        var authorizationResult = await _authorizationService
+            .AuthorizeAsync(User, collection, "CollectionOwnerOrAdminPolicy");
+
+        if (!authorizationResult.Succeeded)
+            return new ForbidResult();
 
         var collectoinVM = _collectionMapper.MapToUpdateCollectionVM(collection);
         return View(collectoinVM);
@@ -138,9 +150,16 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> DeleteCollection(string collectionId)
     {
+        bool isValid = Guid.TryParse(collectionId, out Guid guidCollectionId);
+        if (!isValid) return NotFound();
+        var authorizationResult = await _authorizationService
+            .AuthorizeAsync(User, new Collection() { UserId = collectionId }, "CollectionOwnerOrAdminPolicy");
+        if (!authorizationResult.Succeeded)
+            return new ForbidResult();
+
         try
         {
-            await _collectionRepository.DeleteCollectionAsync(Guid.Parse(collectionId));
+            await _collectionRepository.DeleteCollectionAsync(guidCollectionId);
         }
         catch (Exception)
         {
