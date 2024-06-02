@@ -56,7 +56,10 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> GetCollection(string collectionId)
     {
-        var collection = await _collectionRepository.GetWithItemsByIdAsync(Guid.Parse(collectionId));
+        bool isValid = Guid.TryParse(collectionId, out Guid guidCollectionId);
+        if (!isValid) return NotFound();
+
+        var collection = await _collectionRepository.GetWithItemsByIdAsync(guidCollectionId);
         if (collection == null)
         {
             return NotFound();

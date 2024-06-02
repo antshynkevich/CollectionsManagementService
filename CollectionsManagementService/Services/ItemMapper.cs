@@ -15,6 +15,8 @@ public class ItemMapper : IItemMapper
             ItemName = item.Name,
             CollectionId = item.CollectionId,
             CollectionName = item.Collection.Name,
+            UserId = item.Collection.UserId,
+            CreationDate = item.CreationDate,
             IntegerFields = item.IntegerFields.Select(MapItemFieldHelper<int>.MapToItemViewModel).ToList(),
             BoolFields = item.BooleanFields.Select(MapItemFieldHelper<bool>.MapToItemViewModel).ToList(),
             DateFields = item.DateFields.Select(MapItemFieldHelper<DateOnly>.MapToItemViewModel).ToList(),
@@ -143,5 +145,81 @@ public class ItemMapper : IItemMapper
             StringFields = item.StringFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
             TextFields = item.TextFields.Select(MapItemFieldHelper<string>.MapToItemViewModel).ToList(),
         };
+    }
+
+    public UpdateItemViewModel MapToUpdateItemViewModel(Item item)
+    {
+        var viewModel = new UpdateItemViewModel()
+        {
+            ItemName = item.Name,
+            ItemId = item.ItemId,
+            UserId = item.Collection.UserId,
+            CollectionId = item.Collection.CollectionId,
+            CollectionName = item.Collection.Name
+        };
+
+        viewModel.BoolFields = item.BooleanFields.Select(x => new UpdateItemField<bool>
+        {
+            ItemFieldId = x.BooleanFieldId,
+            FieldType = x.CollectionField.FieldType.ToString(),
+            FieldName = x.CollectionField.FieldName,
+            Value = x.Value
+        }).ToList();
+
+        viewModel.TextFields = item.TextFields.Select(x => new UpdateItemField<string>
+        {
+            ItemFieldId = x.TextFieldId,
+            FieldType = x.CollectionField.FieldType.ToString(),
+            FieldName = x.CollectionField.FieldName,
+            Value = x.Value
+        }).ToList();
+
+        viewModel.StringFields = item.StringFields.Select(x => new UpdateItemField<string>
+        {
+            ItemFieldId = x.StringFieldId,
+            FieldType = x.CollectionField.FieldType.ToString(),
+            FieldName = x.CollectionField.FieldName,
+            Value = x.Value
+        }).ToList();
+
+        viewModel.DateFields = item.DateFields.Select(x => new UpdateItemField<DateOnly>
+        {
+            ItemFieldId = x.DateFieldId,
+            FieldType = x.CollectionField.FieldType.ToString(),
+            FieldName = x.CollectionField.FieldName,
+            Value = x.Value
+        }).ToList();
+
+        viewModel.IntFields = item.IntegerFields.Select(x => new UpdateItemField<int>
+        {
+            ItemFieldId = x.IntegerFieldId,
+            FieldType = x.CollectionField.FieldType.ToString(),
+            FieldName = x.CollectionField.FieldName,
+            Value = x.Value
+        }).ToList();
+
+        return viewModel;
+    }
+
+    public Item MapToItem(UpdateItemViewModel viewModel)
+    {
+        var item = new Item()
+        {
+            CollectionId = viewModel.CollectionId,
+            Name = viewModel.ItemName,
+            ItemId = viewModel.ItemId,
+            IntegerFields = viewModel.IntFields.Select(x => 
+                new IntegerField { IntegerFieldId = x.ItemFieldId, Value = x.Value }).ToList(),
+            StringFields = viewModel.StringFields.Select(x =>
+                new StringField { StringFieldId = x.ItemFieldId, Value = x.Value }).ToList(),
+            TextFields = viewModel.TextFields.Select(x =>
+                new TextField { TextFieldId = x.ItemFieldId, Value = x.Value }).ToList(),
+            DateFields = viewModel.DateFields.Select(x =>
+                new DateField { DateFieldId = x.ItemFieldId, Value = x.Value }).ToList(),
+            BooleanFields = viewModel.BoolFields.Select(x =>
+                new BooleanField { BooleanFieldId = x.ItemFieldId, Value = x.Value }).ToList(),
+        };
+
+        return item;
     }
 }

@@ -66,8 +66,9 @@
             input.required = true;
         } else {
             const input = document.getElementById("input" + i);
-            elem.disabled = true;
-            elem.value = "";
+            input.disabled = true;
+            input.required = false;
+            input.value = "";
         }
     }
 </script>

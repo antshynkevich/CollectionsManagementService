@@ -10,4 +10,5 @@ public interface IItemRepository
     Task AddItemAsync(Item item);
     Task<List<Item>> GetNewestItemsAsync(int number = 5);
     Task<List<Item>> GetResultFromSearchAsync(string searchString);
+    Task<Collection> GetCollectionDataByItemIdAsync(Guid itemId);
 }
