@@ -9,37 +9,44 @@
     {
         if (User.Claims.FirstOrDefault(x => x.Type == "role")?.Value == "admin")
         {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">
-                    Admin panel
+            <li class="nav-item me-2">
+                <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="Index">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <span class="small fw-bold">Admin panel</span>
                 </a>
             </li>
         }
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                Hello @User.FindFirstValue("username")!
+        <li class="nav-item me-2">
+            <a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="fa-solid fa-address-card fs-5"></i>
+                <span class="small fw-bold">Account</span>
             </a>
+
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-page="/Account/Logout"
                   asp-route-returnUrl="@Url.Action("Index", "Home")"
                   asp-area="Identity" method="post">
-                <button class="nav-link btn btn-link text-dark"
-                        type="submit">
-                    Logout
+                <button class="btn btn-outline-danger" type="submit">
+                    <i class="fa-solid fa-right-from-bracket fs-5"></i>
+                    <span class="small fw-bold">Logout</span>
                 </button>
             </form>
         </li>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Register">Register</a>
+        <li class="nav-item me-2">
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-primary">
+                <i class="fa-solid fa-address-card fs-5"></i>
+                <span class="small fw-bold">Register</span>
+            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Login">Login</a>
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span class="small fw-bold">Login</span>
+            </a>
         </li>
     }
 </ul>

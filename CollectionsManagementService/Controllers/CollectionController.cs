@@ -150,7 +150,7 @@ public class CollectionController : Controller
         return RedirectToAction(nameof(GetCollection), new { collectionId = collectionViewModel.CollectionId });
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> DeleteCollection(string collectionId)
     {
         bool isValid = Guid.TryParse(collectionId, out Guid guidCollectionId);

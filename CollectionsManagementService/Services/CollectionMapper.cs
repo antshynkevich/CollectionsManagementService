@@ -105,6 +105,7 @@ public class CollectionMapper : ICollectionMapper
             CollectionName = collection.Name,
             Description = collection.Description,
             CategoryName = collection.Category.Name,
+            CategoryId = collection.CategoryId,
             UserName = collection.ApplicationUser?.UserName ?? "default username",
             ImageUrl = collection.ImageUrl,
             CollectionId = collection.CollectionId,

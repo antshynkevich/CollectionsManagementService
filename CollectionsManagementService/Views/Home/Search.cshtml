@@ -1,4 +1,8 @@
-﻿@model CollectionsManagementService.VievModels.SearchResultViewModel
+﻿@{
+    ViewData["Title"] = $"The results for the '{ViewData["SearchString"]}' query";
+}
+
+@model CollectionsManagementService.VievModels.SearchResultViewModel
 
 
 @if (Model.Collections.Count == 0 && Model.Items.Count == 0)
@@ -128,5 +132,4 @@ else
             </tbody>
         </table>
     }
-
 }

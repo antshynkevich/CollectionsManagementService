@@ -9,6 +9,12 @@ public class IsOwnerOrAdminHandler : AuthorizationHandler<MustBeCollectionOwnerO
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, MustBeCollectionOwnerOrAdminRequirement requirement)
     {
         ClaimsPrincipal user = context.User;
+        var blockClame = user.Claims.FirstOrDefault(c => c.Type == "blocked" || c.Value == "blocked");
+        if (blockClame != null)
+        {
+            return Task.CompletedTask;
+        }
+
         var roleClaim = user.Claims.FirstOrDefault(c => c.Type == "role");
         if (roleClaim?.Value == "admin")
         {

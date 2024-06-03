@@ -1,4 +1,8 @@
-﻿@model CollectionsManagementService.VievModels.Collection.CreateCollectionViewModel
+﻿@using DataORMLayer
+@model CollectionsManagementService.VievModels.Collection.CreateCollectionViewModel
+@{
+    ViewData["Title"] = "Create your own collection";
+}
 
 <h2 class="display-5 ps-3 mb-3">Create your own collection on this page!</h2>
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -13,7 +17,8 @@
                 </div>
                 <div class="form-control my-3 shadow-sm">
                     <label class="fw-light fs-5" asp-for="Description">Collection description:</label>
-                    <input class="form-control my-1" asp-for="Description" />
+                    <textarea rows="3" class="form-control shadow-sm" type="text"
+                              required maxlength="@Constants.DescriptionSize" asp-for="Description"></textarea>
                     <span asp-validation-for="Description" class="text-danger fw-light"></span>
                 </div>
                 <div class="form-control my-3 shadow-sm">

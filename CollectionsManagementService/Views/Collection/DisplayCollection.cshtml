@@ -5,25 +5,39 @@
 @model DetailedCollectionViewModel
 @{
     var authorizationResult = await AuthorizationService.AuthorizeAsync(User, Model, "CollectionOwnerOrAdminPolicy");
+    ViewData["Title"] = $"\'{@Model.CollectionName}\' collection";
 }
 
 <div class="container">
-    <h1 class="col-8">The @Model.CollectionName collection</h1>
+    <h1 class="col-10 display-6">'@Model.CollectionName' collection</h1>
     <div class="row my-3">
         <div class="col-6">
-            <div class="border p-3">
-                <div>@Model.Description</div>
-                <div>Category - @Model.CategoryName</div>
-                <div>Created by - @Model.UserName</div>
-                @if (authorizationResult.Succeeded)
-                {
-                    <a class="btn btn-outline-primary" asp-controller="Collection" asp-action="UpdateCollection" asp-route-collectionId="@Model.CollectionId">
-                        Change this collection
-                    </a>
-                    <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
-                        Add new item
-                    </a>
-                }
+            <div class="border p-3 fw-light">
+                <div class="mb-2">@Model.Description</div>
+                <div>
+                    Category - 
+                    <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="text-decoration-none">@Model.CategoryName</a>
+                </div>
+                <div class="mb-1">Created by - @Model.UserName</div>
+                    @if (authorizationResult.Succeeded)
+                    {
+                        <div class="rounded bg-light btn-group">
+                            <a class="btn btn-sm btn-outline-success rounded m-1" asp-controller="Item" 
+                                asp-action="Add" asp-route-collectionId="@Model.CollectionId">
+                                Add new item
+                            </a>
+                        <a class="btn btn-sm btn-outline-primary rounded m-1" asp-controller="Collection"
+                           asp-action="UpdateCollection" asp-route-collectionId="@Model.CollectionId">
+                                Change this collection
+                            </a>
+                            <form method="post">
+                            <button class="btn btn-sm btn-outline-danger m-1" asp-controller="Collection"
+                                    asp-action="DeleteCollection" asp-route-collectionId="@Model.CollectionId">
+                                    Delete this collection
+                                </button>
+                            </form>
+                        </div>
+                    }
             </div>
 
         </div>
@@ -37,7 +51,7 @@
         }
     </div>
 </div>
-<h3>Custom fields of the @Model.CollectionName collection</h3>
+<h3 class="lead fs-4">Custom fields of the '@Model.CollectionName' collection</h3>
 <div>
     <table class="table table-light table-bordered border border-1">
         <tr>
@@ -57,72 +71,97 @@
     </table>
 </div>
 
-<h3>Collection Items</h3>
-<div>
-    <table class="table table-striped border border-1 table-bordered">
-        <thead>
-            <tr>
-                <th>Item #</th>
-                <th>Item Name</th>
-                <th>Lines of the item</th>
-                <th>Numbers of the item</th>
-                <th>Dates of the item</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ int index = 1; }
-            @foreach (var item in Model.Items)
-            {
+@if (Model.Items.Count > 0)
+{
+    <h3 class="display-6">Collection Items</h3>
+    <div>
+        <table class="table table-striped border border-1 table-bordered">
+            <thead>
                 <tr>
-                    <td>@index</td>
-                    <td>
-                        <a asp-controller="Item" asp-action="Index" asp-route-itemId="@item.ItemId">
-                            @item.ItemName
-                        </a>
-                    </td>
-                    <td>
-                        <ul class="my-0">
-                            @foreach (var customField in item.StringFields)
-                            {
-                                <li>
-                                    @customField.FieldName -
-                                    @customField.Value
-                                </li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var customField in item.IntegerFields)
-                            {
-                                <li>
-                                    @customField.FieldName -
-                                    @customField.Value
-                                </li>
-                            }
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var customField in item.DateFields)
-                            {
-                                <li>
-                                    @customField.FieldName -
-                                    @customField.Value
-                                </li>
-                            }
-                        </ul>
-
-                    </td>
+                    <th>Item #</th>
+                    <th>Item Name</th>
+                    @if(Model.Items[0].StringFields.Count > 0)
+                    {
+                        <th>Lines of the item</th>
+                    }
+                    @if (Model.Items[0].IntegerFields.Count > 0)
+                    {
+                        <th>Numbers of the item</th>
+                    }
+                    @if (Model.Items[0].DateFields.Count > 0)
+                    {
+                        <th>Dates of the item</th>
+                    }
                 </tr>
-                index++;
-            }
-        </tbody>
-    </table>
-    @if (authorizationResult.Succeeded)
-    {
-        <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
-            Add new item
-        </a>
-    }
-</div>
+            </thead>
+            <tbody>
+                @{ int index = 1; }
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td>
+                            <a asp-controller="Item" asp-action="Index" asp-route-itemId="@item.ItemId">
+                                @item.ItemName
+                            </a>
+                        </td>
+                        @if (Model.Items[0].StringFields.Count > 0)
+                        {
+                            <td>
+                                <ul class="list-group">
+                                    @foreach (var customField in item.StringFields)
+                                    {
+                                        <li class="list-group-item list-group-item-success">
+                                            @customField.FieldName -
+                                            @customField.Value
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        }
+                        @if (Model.Items[0].IntegerFields.Count > 0)
+                        {
+                            <td>
+                                <ul class="list-group">
+                                    @foreach (var customField in item.IntegerFields)
+                                    {
+                                        <li class="list-group-item list-group-item-info">
+                                            @customField.FieldName -
+                                            @customField.Value
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        }
+                        @if (Model.Items[0].DateFields.Count > 0)
+                        {
+                            <td>
+                                <ul class="list-group">
+                                    @foreach (var customField in item.DateFields)
+                                    {
+                                        <li class="list-group-item list-group-item-success">
+                                            @customField.FieldName -
+                                            @customField.Value
+                                        </li>
+                                    }
+                                </ul>
+
+                            </td>
+                        }
+                    </tr>
+                    index++;
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="lead mb-1 fs-4">There are no items in this collection yet.</div>
+}
+@if (authorizationResult.Succeeded)
+{
+    <a class="btn btn-outline-success" asp-controller="Item" asp-action="Add" asp-route-collectionId="@Model.CollectionId">
+        Add new item
+    </a>
+}

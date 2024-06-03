@@ -1,6 +1,6 @@
 ﻿@model List<CollectionsManagementService.VievModels.UserViewModel>
 
-<h1>Hello from admin page</h1>
+<h1 class="display-6">You can change user roles, block or delete user here.</h1>
 <div>
     <table class="table table-light table-striped table-bordered">
         <thead>
@@ -26,16 +26,65 @@
                         @Model[i].UserEmail
                     </td>
                     <td>
-                        @Model[i].IsAdmin
+                        <div class="text-center">
+                            @if (@Model[i].IsAdmin)
+                            {
+                                <button type="button" class="btn btn-success btn-sm" disabled>
+                                    <i class="fa-regular fa-square-check fs-4"></i>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                                    <i class="fa-solid fa-square-xmark fs-4"></i>
+                                </button>
+                            }
+                        </div>
                     </td>
                     <td>
-                        @Model[i].IsBlocked
+                        <div class="text-center">
+                            @if (@Model[i].IsBlocked)
+                            {
+                                <button type="button" class="btn btn-danger btn-sm" disabled>
+                                    <i class="fa-regular fa-square-check fs-4"></i>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-success btn-sm" disabled>
+                                    <i class="fa-solid fa-square-xmark fs-4"></i>
+                                </button>
+                            }
+                        </div>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <form method="post">
-                            <button class="btn btn-outline-dark btn-sm" asp-controller="Admin" asp-action="ChangeBlocking" asp-route-userId="@Model[i].UserId" type="submit">Block</button>
-                            <button class="btn btn-outline-dark btn-sm" asp-controller="Admin" asp-action="ChangeRole" asp-route-userId="@Model[i].UserId" type="submit">Role</button>
-                            <button class="btn btn-outline-danger btn-sm" asp-action="DeleteUser" asp-route-userId="@Model[i].UserId" type="submit">Del</button>
+                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button class="btn btn-warning btn-sm" asp-controller="Admin" asp-action="ChangeBlocking" asp-route-userId="@Model[i].UserId" type="submit">
+                                    @if (@Model[i].IsBlocked)
+                                    {
+                                        <i class="fa-solid fa-key p-1 fs-5"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-solid fa-ban p-1 fs-5"></i>
+                                        @* <i class="fa-solid fa-lock p-1 fs-5"></i> *@
+                                    }
+                                </button>
+                                <button class="btn btn-primary btn-sm" asp-controller="Admin" asp-action="ChangeRole" asp-route-userId="@Model[i].UserId" type="submit">
+                                    @if (@Model[i].IsAdmin)
+                                    {
+                                        <i class="fa-solid fa-thumbs-down p-1 fs-5"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-solid fa-crown p-1 fs-5"></i>
+                                    }
+                                </button>
+                                <button class="btn btn-danger btn-sm" asp-action="DeleteUser" asp-route-userId="@Model[i].UserId" type="submit">
+                                    <i class="fa-solid fa-trash p-1 fs-5"></i>
+                                </button>
+                            </div>
                         </form>
                     </td>
                 </tr>

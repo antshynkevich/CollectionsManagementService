@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CollectionsManagementService.styles.css" asp-append-version="true" />
+    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -15,21 +16,36 @@
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <img class="img-fluid" style="max-width: 120px;" src="~/app_logo_exp.svg" alt="The app logo" />
                 </a>
-                <form method="get" class="d-flex" asp-controller="Home" asp-action="Search">
-                    <input class="form-control me-2" name="searchStr" type="search" placeholder="Search" aria-label="Search" value="@ViewData["SearchString"]">
-                    <button class="btn btn-outline-success me-1" type="submit">Search</button>
-                </form>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">    
+                    <ul class="navbar-nav f`">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Collection" asp-action="ShowUserCollections">My Collections</a>
+                            <form method="get" asp-controller="Home" asp-action="Search">
+                                <div class="btn-group" role="group" aria-label="Search group">
+                                    <div class="input-group">
+                                        <input type="search" name="searchStr" class="form-control fw-light" placeholder="Search..." aria-label="Search" value="@ViewData["SearchString"]">
+                                        <button class="btn btn-outline-dark input-group-text" type="submit">
+                                            <i class="fas fa-magnifying-glass fs-5"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <a class="btn btn-outline-dark" asp-area="" asp-controller="Collection" asp-action="ShowUserCollections">
+                                <i class="fa-solid fa-house fs-5"></i>
+                                <span class="small fw-bold">My collections</span>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Collection" asp-action="Index">All collections</a>
+                            <a class="btn btn-outline-dark" asp-controller="Collection" asp-action="Index">
+                                <i class="fa-solid fa-boxes-stacked fs-5"></i>
+                                <span class="small fw-bold">All collections</span>
+                            </a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
