@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollectionsManagementService.VievModels.Collection;
 
-public class CreateCollectionViewModel
+public class CreateCollectionViewModel : ICollectionNameContains
 {
     private static readonly int typesOfCustomFields = 5;
     private static readonly int oneTypeCustomFields = 3;
@@ -24,7 +24,7 @@ public class CreateCollectionViewModel
 
     [Required(ErrorMessage = "Collection name is required")]
     [MaxLength(Constants.NameSize)]
-    public string Name { get; set; }
+    public string CollectionName { get; set; }
     [Required(ErrorMessage = "Description is required")]
     [MaxLength(Constants.DescriptionSize)]
     public string Description { get; set; }

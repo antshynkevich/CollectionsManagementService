@@ -1,10 +1,10 @@
 ﻿@using DataORMLayer
 @model CollectionsManagementService.VievModels.Collection.UpdateCollectionViewModel
 @{
-    ViewData["Title"] = $"Update the '{@Model.Name}' collection";
+    ViewData["Title"] = $"Update the '{@Model.CollectionName}' collection";
 }
 
-<h1 class="display-6">Update the @Model.Name collection</h1>
+<h1 class="display-6">Update the @Model.CollectionName collection</h1>
 <div class="lead fs-4">On this page you can change the name, the description and field labels of your collection.</div>
 <div class="container">
     <div class="row">
@@ -13,9 +13,9 @@
             <form method="post" enctype="multipart/form-data">
                 <div class="form-control shadow-sm">
                     <div class="mb-3">
-                        <label class="form-label fw-light" asp-for="Name">Change collection name:</label>
-                        <input class="form-control shadow-sm" asp-for="Name" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <label class="form-label fw-light" asp-for="CollectionName">Change collection name:</label>
+                        <input class="form-control shadow-sm" asp-for="CollectionName" />
+                        <span asp-validation-for="CollectionName" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-light" asp-for="Description">Change collection description:</label>
@@ -28,7 +28,7 @@
                         {
                             <div class="col-5">
                                 <div class="img-thumbnail">
-                                    <img src="@Model.ImageUrl" alt="The image of the @Model.Name collection" class="img-fluid" />
+                                    <img src="@Model.ImageUrl" alt="The image of the @Model.CollectionName collection" class="img-fluid" />
                                 </div>
                             </div>
                             <div class="fw-light mt-2">You can change the image of your collection.</div>

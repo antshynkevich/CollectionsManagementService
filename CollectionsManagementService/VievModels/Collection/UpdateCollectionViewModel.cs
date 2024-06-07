@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollectionsManagementService.VievModels.Collection;
 
-public class UpdateCollectionViewModel
+public class UpdateCollectionViewModel : ICollectionNameContains
 {
     public Guid CollectionId { get; set; }
     [Required]
     [MaxLength(Constants.NameSize)]
-    public string Name { get; set; }
+    public string CollectionName { get; set; }
     [Required]
     [MaxLength(Constants.DescriptionSize)]
     public string Description { get; set; }

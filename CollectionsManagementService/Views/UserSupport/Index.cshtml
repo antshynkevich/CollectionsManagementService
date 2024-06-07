@@ -1,0 +1,68 @@
+﻿@model CollectionsManagementService.VievModels.UserTicketViewModel
+@{
+    ViewData["Title"] = "Send us a report here.";
+}
+
+<h2 class="lead fs-3 text-center mb-3" style="margin-top: 7%">You can create a ticket and send a report to us using this form!</h2>
+<div class="d-flex justify-content-center">
+    <div class="col-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="PostIssue" method="post">
+            <div class="border rounded shadow-sm px-3 py-2">
+                <div class="mb-2">
+                    <label class="form-label fw-light fs-5">Brief summary of the problem:</label>
+                    <input class="form-control shadow-sm" type="text" asp-for="Summary">
+                    <span asp-validation-for="Summary" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label fw-light fs-5">Describe your problem shortly (not required):</label>
+                    <textarea class="form-control shadow-sm" type="text" asp-for="Description" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label class="fw-light fs-5">Please choose priority of your issue:</label>
+                    <select class="form-control dropdown my-1 shadow-sm" asp-for="PriorityId" asp-items="Model.PriorityItems">
+                        <option value="" hidden disabled selected>-Select a task priority-</option>
+                    </select>
+                    <span asp-validation-for="PriorityId" class="text-danger fw-light">Select a priority</span>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label fw-light fs-5 my-1">The problem page link is:</label>
+                    <div class="input-group">
+                        <input id="linkInput" class="form-control shadow-sm" type="text" asp-for="PageLinkUserNeedHelp" readonly>
+                        <button onclick="copyToClipboard()" class="btn btn-outline-secondary input-group-text" type="button" title="Copy To Clipboard">
+                            <i class="fa-regular fa-copy fs-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                @if (Model.CollectionName != "")
+                {
+                    <div class="mb-2">
+                        <label class="form-label fw-light fs-5 my-1">Collection's name with a problem.</label>
+                        <input class="form-control shadow-sm" type="text" asp-for="CollectionName" readonly>
+                    </div>
+                }
+            </div>
+            <div class="text-end mt-2">
+                <button class="btn btn-primary shadow-sm">
+                    Submit the problem
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .field-validation-valid {
+        display: none;
+    }
+</style>
+
+<script>
+    function copyToClipboard() {
+        const inputField = document.getElementById('linkInput');
+        inputField.select();
+        document.execCommand('copy');
+    }
+</script>

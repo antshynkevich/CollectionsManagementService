@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollectionsManagementService.VievModels.Item;
 
-public class UpdateItemViewModel : IUserIdContained
+public class UpdateItemViewModel : IUserIdContained, ICollectionNameContains
 {
     public Guid ItemId { get; set; }
     [Required]

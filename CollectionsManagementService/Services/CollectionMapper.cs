@@ -23,7 +23,7 @@ public class CollectionMapper : ICollectionMapper
         var collection = new Collection()
         {
             CollectionId = collectionId,
-            Name = collectionVM.Name,
+            Name = collectionVM.CollectionName,
             Description = collectionVM.Description,
             CreationDate = DateTime.UtcNow,
             ImageUrl = collectionVM.ImageUrl,
@@ -40,7 +40,7 @@ public class CollectionMapper : ICollectionMapper
         var collection = new Collection()
         {
             CollectionId = collectionVM.CollectionId,
-            Name = collectionVM.Name,
+            Name = collectionVM.CollectionName,
             Description = collectionVM.Description,
             ImageUrl= collectionVM.ImageUrl
         };
@@ -87,7 +87,7 @@ public class CollectionMapper : ICollectionMapper
                     FieldTypeName = x.FieldType.ToString()
                 }).ToList(),
             Description = collection.Description,
-            Name = collection.Name,
+            CollectionName = collection.Name,
             ImageUrl = collection.ImageUrl
             //CategoryId = collection.CategoryId
         };

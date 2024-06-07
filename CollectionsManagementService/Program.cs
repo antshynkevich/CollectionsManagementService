@@ -9,9 +9,11 @@ using CloudinaryDotNet;
 using CollectionsManagementService;
 using CollectionsManagementService.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using DotNetEnv.Configuration;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Configuration.AddDotNetEnv(".env", LoadOptions.TraversePath());
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -50,8 +52,9 @@ builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<ICloudService, CloudService>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddSingleton<IAuthorizationHandler, IsOwnerOrAdminHandler>();
+builder.Services.AddScoped<JiraService>();
 
-var cloudinary = new Cloudinary("cloudinary://267417229445433:t2vEgh1RxVe9lqlV7HMqbPmQV1U@dedob71th");
+var cloudinary = new Cloudinary(Env.GetString("CloudinaryLink"));
 builder.Services.AddSingleton(cloudinary);
 
 var app = builder.Build();

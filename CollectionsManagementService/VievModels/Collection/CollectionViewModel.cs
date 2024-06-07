@@ -1,6 +1,6 @@
 ﻿namespace CollectionsManagementService.VievModels.Collection;
 
-public class CollectionViewModel
+public class CollectionViewModel : ICollectionNameContains
 {
     public Guid CollectionId { get; set; }
     public string CollectionName { get; set; }

@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using CollectionsManagementService.VievModels.Collection
+@{
+    var collectionName = Model is ICollectionNameContains ? ((ICollectionNameContains)Model).CollectionName : "Not a collection";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -62,6 +67,9 @@
     <footer class="border-top footer text-muted">
         <div class="container small">
             &copy; 2024 - The 'My collection shelf' course project from Anton Shynkevich for the Itransition company. For educational purposes only
+            <a class="btn btn-outline-info text-black-50 btn-sm text-light ms-4" asp-controller="UserSupport"
+               asp-action="Index" asp-route-linkForHelp="@Context.Request.Host@Context.Request.Path@Context.Request.QueryString" 
+               asp-route-collectionName="@collectionName">Send a report</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
