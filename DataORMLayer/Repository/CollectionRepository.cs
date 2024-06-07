@@ -170,4 +170,15 @@ public class CollectionRepository : ICollectionRepository
 
         return data;
     }
+
+    public async Task<List<Collection>> GetCollectionsToExportByUserIdAsync(string userId)
+    {
+        return await _context.Collections
+            .AsNoTracking()
+            .Where(c => c.UserId == userId)
+            .Include(c => c.Category)
+            .Include(c => c.Items)
+            .Include(c => c.ApplicationUser)
+            .ToListAsync();
+    }
 }

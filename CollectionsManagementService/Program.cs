@@ -11,6 +11,9 @@ using CollectionsManagementService.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using DotNetEnv.Configuration;
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddDotNetEnv(".env", LoadOptions.TraversePath());
@@ -31,6 +34,23 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<AppDbContext>();
+
+byte[] key = Encoding.UTF8.GetBytes(Env.GetString("tokensecretkey"));
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true
+    };
+});
 
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("AdminsOnly", policy => {

@@ -16,4 +16,5 @@ public interface ICollectionRepository
     Task<List<Collection>> GetLargestCollectionsAsync(int number = 5);
     Task<List<Collection>> GetSortedCollectionsAsync(string sortOrder, int? categoryId);
     Task<List<Collection>> GetResultFromSearchAsync(string searchString);
+    Task<List<Collection>> GetCollectionsToExportByUserIdAsync(string userId);
 }

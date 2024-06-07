@@ -1,0 +1,26 @@
+﻿@page
+@using Microsoft.AspNetCore.Http.Features
+@model TwoFactorAuthenticationModel
+@{
+    ViewData["Title"] = "Your secure API token";
+    ViewData["ActivePage"] = ManageNavPages.UserTokeApi;
+}
+
+<h3>@ViewData["Title"]</h3>
+<label class="form-label fs-5 my-1">Your api token is here</label>
+<div class="input-group mt-1" style="width:70%">
+    <input id="takeToken" class="form-control shadow-sm" type="text" asp-for="ApiToken" readonly>
+    <button onclick="copyToClipboard()" class="btn btn-outline-secondary input-group-text" type="button" title="Copy To Clipboard">
+        <i class="fa-regular fa-copy fs-5"></i>
+    </button>
+</div>
+
+<a class="btn btn-primary mt-3" asp-page-handler="newtoken">Refresh token</a>
+
+<script>
+    function copyToClipboard() {
+        const inputField = document.getElementById('takeToken');
+        inputField.select();
+        document.execCommand('copy');
+    }
+</script>
