@@ -5,25 +5,23 @@ using DataORMLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using System.Text.Json;
+using System.Security.Claims;
 
 namespace CollectionsManagementService.Controllers;
 
 [Authorize(Policy = "UserNotBlocked")]
 public class UserSupportController : Controller
 {
-    private readonly string _jiraAdminAccountId;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JiraService _jiraService;
 
     public UserSupportController(UserManager<ApplicationUser> userManager, JiraService jiraService)
     {
         _userManager = userManager;
-        _jiraAdminAccountId = DotNetEnv.Env.GetString("JiraAdminAccountId");
         _jiraService = jiraService;
     }
 
+    [HttpGet]
     public IActionResult Index(string linkForHelp, string collectionName)
     {
         if (!linkForHelp.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
@@ -45,8 +43,21 @@ public class UserSupportController : Controller
     {
         var currentUser = await _userManager.GetUserAsync(User);
         var currentUserEmail = currentUser?.Email;
-        var jiraUserId = await _jiraService.GetUserIdFromJiraByEmailAsync(currentUserEmail);
-        // TODO: add jira user id to my ApplicationUser using claim
+
+        var jiraUserIdClaimName = "jirauserid";
+        var claims = await _userManager.GetClaimsAsync(currentUser);
+        var jiraUserIdFromDb = claims.FirstOrDefault(c => c.Type == jiraUserIdClaimName)?.Value ?? null;
+
+        var jiraUserId = "";
+        if (jiraUserIdFromDb is not null)
+        {
+            jiraUserId = jiraUserIdFromDb;
+        }
+        else
+        {
+            jiraUserId = await _jiraService.GetUserIdFromJiraByEmailAsync(currentUserEmail);
+            await _userManager.AddClaimAsync(currentUser, new Claim(jiraUserIdClaimName, jiraUserId));
+        }
 
         var newTicket = new JsonBasedUserTicket(
             summary: userTicket.Summary,
@@ -54,14 +65,14 @@ public class UserSupportController : Controller
             link: userTicket.PageLinkUserNeedHelp,
             priorityValue: userTicket.PriorityId,
             collectionName: userTicket.CollectionName,
-            reporterId: jiraUserId,
-            jiraAdminAccountId: _jiraAdminAccountId
+            reporterId: jiraUserId
         );
 
         var ticketLink = await _jiraService.CreateIssueAndReturnLinkAsync(newTicket);
         return RedirectToAction(nameof(RegisteredIssue), new { ticketLink });
     }
 
+    [HttpGet]
     public IActionResult RegisteredIssue(string ticketLink)
     {
         return View("Message", ticketLink);

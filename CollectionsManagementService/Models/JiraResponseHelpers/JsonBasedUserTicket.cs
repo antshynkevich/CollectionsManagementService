@@ -9,13 +9,12 @@ public class JsonBasedUserTicket
 
     public JsonBasedUserTicket(string summary, string reporterId, 
         string description, string link,
-        string priorityValue, string collectionName, string jiraAdminAccountId)
+        string priorityValue, string collectionName)
     {
         Fields = new Fields
         {
             Project = new OnlyIdField { Id = "10000" },
             Issuetype = new OnlyIdField { Id = "10006" },
-            Assignee = new OnlyIdField { Id = jiraAdminAccountId },
             Reporter = new OnlyIdField { Id = reporterId },
             Summary = summary,
             Description = description,
