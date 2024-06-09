@@ -1,9 +1,8 @@
 ﻿@page
-@using Microsoft.AspNetCore.Http.Features
-@model TwoFactorAuthenticationModel
+@model UserApiTokenModel
 @{
     ViewData["Title"] = "Your secure API token";
-    ViewData["ActivePage"] = ManageNavPages.UserTokeApi;
+    ViewData["ActivePage"] = ManageNavPages.UserTokenApi;
 }
 
 <h3>@ViewData["Title"]</h3>
@@ -14,8 +13,6 @@
         <i class="fa-regular fa-copy fs-5"></i>
     </button>
 </div>
-
-<a class="btn btn-primary mt-3" asp-page-handler="newtoken">Refresh token</a>
 
 <script>
     function copyToClipboard() {

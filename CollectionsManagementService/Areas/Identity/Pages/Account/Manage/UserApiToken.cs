@@ -10,11 +10,11 @@ using System.Text;
 
 namespace CollectionsManagementService.Areas.Identity.Pages.Account.Manage
 {
-    public class TwoFactorAuthenticationModel : PageModel
+    public class UserApiTokenModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public TwoFactorAuthenticationModel(
+        public UserApiTokenModel(
             UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
@@ -22,7 +22,7 @@ namespace CollectionsManagementService.Areas.Identity.Pages.Account.Manage
 
         public string ApiToken { get; set; } = "Please generate a new one.";
 
-        public async Task<IActionResult> OnGetNewTokenAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)

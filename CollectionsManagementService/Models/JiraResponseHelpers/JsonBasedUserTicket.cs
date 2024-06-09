@@ -5,68 +5,68 @@ namespace CollectionsManagementService.Models.JiraResponseHelpers;
 public class JsonBasedUserTicket
 {
     [JsonPropertyName("fields")]
-    public Fields Fields { get; set; }
+    public IssueFields Fields { get; set; }
 
     public JsonBasedUserTicket(string summary, string reporterId, 
         string description, string link,
         string priorityValue, string collectionName)
     {
-        Fields = new Fields
+        Fields = new IssueFields
         {
-            Project = new OnlyIdField { Id = "10000" },
-            Issuetype = new OnlyIdField { Id = "10006" },
-            Reporter = new OnlyIdField { Id = reporterId },
+            Project = new Issuetype { Id = "10000" },
+            Issuetype = new Issuetype { Id = "10006" },
+            Reporter = new Issuetype { Id = reporterId },
             Summary = summary,
             Description = description,
-            Link = link,
-            CollectionName = collectionName,
-            Priority = new CustomFieldIdValuePair { Value = priorityValue },
-            Status = new CustomFieldIdValuePair { Value = "Opened" }
+            Customfield10033 = link,
+            Customfield10035 = collectionName,
+            Customfield10039 = new Customfield100 { Value = priorityValue },
+            Customfield10040 = new Customfield100 { Value = "Opened" }
         };
     }
 }
 
-public class Fields
+public partial class IssueFields
 {
     [JsonPropertyName("assignee")]
-    public OnlyIdField Assignee { get; set; }
+    public object Assignee { get; set; }
 
     [JsonPropertyName("project")]
-    public OnlyIdField Project { get; set; }
+    public Issuetype Project { get; set; }
 
     [JsonPropertyName("issuetype")]
-    public OnlyIdField Issuetype { get; set; }
+    public Issuetype Issuetype { get; set; }
 
     [JsonPropertyName("summary")]
     public string Summary { get; set; }
 
     [JsonPropertyName("reporter")]
-    public OnlyIdField Reporter { get; set; }
+    public Issuetype Reporter { get; set; }
 
     [JsonPropertyName("description")]
     public string Description { get; set; }
 
     [JsonPropertyName("customfield_10033")]
-    public string Link { get; set; }
+    public string Customfield10033 { get; set; }
 
     [JsonPropertyName("customfield_10040")]
-    public CustomFieldIdValuePair Status { get; set; }
+    public Customfield100 Customfield10040 { get; set; }
 
     [JsonPropertyName("customfield_10039")]
-    public CustomFieldIdValuePair Priority { get; set; }
+    public Customfield100 Customfield10039 { get; set; }
 
     [JsonPropertyName("customfield_10035")]
-    public string CollectionName { get; set; }
+    public string Customfield10035 { get; set; }
 }
 
-public class OnlyIdField
-{
-    [JsonPropertyName("id")]
-    public string Id { get; set; }
-}
-
-public class CustomFieldIdValuePair
+public partial class Customfield100
 {
     [JsonPropertyName("value")]
     public string Value { get; set; }
+}
+
+public partial class Issuetype
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
 }
