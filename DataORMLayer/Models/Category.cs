@@ -8,7 +8,7 @@ public class Category
 {
     public int CategoryId { get; set; }
     [Required]
-    [MaxLength(64)]
+    [MaxLength(Constants.NameSize)]
     public string Name { get; set; }
 
     public ICollection<Collection> Collections { get; set; }

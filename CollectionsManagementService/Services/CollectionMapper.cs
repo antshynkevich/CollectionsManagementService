@@ -23,11 +23,11 @@ public class CollectionMapper : ICollectionMapper
         var collection = new Collection()
         {
             CollectionId = collectionId,
-            Name = collectionVM.Name,
+            Name = collectionVM.CollectionName,
             Description = collectionVM.Description,
             CreationDate = DateTime.UtcNow,
             ImageUrl = collectionVM.ImageUrl,
-            CategoryId = int.Parse(collectionVM.CategoryId),
+            CategoryId = collectionVM.CategoryId,
             UserId = userId,
             CollectionFields = collectionFields
         };
@@ -40,19 +40,16 @@ public class CollectionMapper : ICollectionMapper
         var collection = new Collection()
         {
             CollectionId = collectionVM.CollectionId,
-            Name = collectionVM.Name,
+            Name = collectionVM.CollectionName,
             Description = collectionVM.Description,
             ImageUrl= collectionVM.ImageUrl
         };
 
-        if (collection.CollectionFields != null)
+        collection.CollectionFields = collectionVM.CollectionFields.Select(x => new CollectionField
         {
-            collection.CollectionFields = collectionVM.CollectionFields.Select(x => new CollectionField
-            {
-                CollectionFieldId = x.FieldId,
-                FieldName = x.FieldName
-            }).ToList();
-        }
+            CollectionFieldId = x.FieldId,
+            FieldName = x.FieldName
+        }).ToList();
 
         return collection;
     }
@@ -90,7 +87,7 @@ public class CollectionMapper : ICollectionMapper
                     FieldTypeName = x.FieldType.ToString()
                 }).ToList(),
             Description = collection.Description,
-            Name = collection.Name,
+            CollectionName = collection.Name,
             ImageUrl = collection.ImageUrl
             //CategoryId = collection.CategoryId
         };
@@ -108,10 +105,12 @@ public class CollectionMapper : ICollectionMapper
             CollectionName = collection.Name,
             Description = collection.Description,
             CategoryName = collection.Category.Name,
+            CategoryId = collection.CategoryId,
             UserName = collection.ApplicationUser?.UserName ?? "default username",
             ImageUrl = collection.ImageUrl,
             CollectionId = collection.CollectionId,
             CreationDate = collection.CreationDate,
+            UserId = collection.UserId,
             CustomCollectionFields = collection.CollectionFields
                 .Select(f => new CollectionFieldViewModel
                 {

@@ -1,12 +1,24 @@
-﻿@model CollectionsManagementService.VievModels.Item.DetailedItemViewModel
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model CollectionsManagementService.VievModels.Item.DetailedItemViewModel
+@{
+    var authorizationResult = await AuthorizationService.AuthorizeAsync(User, Model, "CollectionOwnerOrAdminPolicy");
+}
 
-<h1>@Model.ItemName Item</h1>
-<h2>The Item from the <a asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@Model.CollectionId">@Model.CollectionName</a> Collection</h2>
+<h1 class="display-5">'@Model.ItemName' Item</h1>
+<h2 class="fw-light fs-3 mb-1">
+    An item from the '<a class="text-decoration-none" asp-controller="Collection" asp-action="GetCollection" 
+        asp-route-collectionId="@Model.CollectionId">@Model.CollectionName</a>' collection.
+</h2>
+<div class="fw-light fs-5">
+    Date of Creation – @Model.CreationDate.ToShortDateString()
+</div>
+
 @if (Model.StringFields.Count > 0)
 {
-    <h3>String fields of the item</h3>
-    <div class="col-8">
-        <table class="table table-bordered">
+    <h3 class="display-6 mt-4">String fields of the item</h3>
+    <div class="col-9">
+        <table class="table table-bordered border-secondary table-light shadow-sm">
             @foreach (var stringField in Model.StringFields)
             {
                 <tr>
@@ -18,49 +30,77 @@
     </div>
 }
 
-<h3>Date, Bool, and Number fields</h3>
-<table class="table table-bordered">
-    <tr>
-        @foreach (var date in Model.DateFields)
-        {
-            <th>@date.FieldName</th>
-        }
+@if (Model.BoolFields.Count > 0 || Model.DateFields.Count > 0 || Model.IntegerFields.Count > 0)
+{
+    <h3 class="display-6 mt-3">Date, Bool, and Number fields</h3>
+    <div class="col-9">
+        <table class="table table-light table-bordered border-secondary  shadow-sm">
+            <tr>
+                @foreach (var date in Model.DateFields)
+                {
+                    <th>@date.FieldName</th>
+                }
 
-        @foreach (var boolean in Model.BoolFields)
-        {
-            <th>@boolean.FieldName</th>
-        }
+                @foreach (var boolean in Model.BoolFields)
+                {
+                    <th>@boolean.FieldName</th>
+                }
 
-        @foreach (var integer in Model.IntegerFields)
-        {
-            <th>@integer.FieldName</th>
-        }
-    </tr>
-    <tr>
-        @foreach (var date in Model.DateFields)
-        {
-            <td>@date.Value</td>
-        }
+                @foreach (var integer in Model.IntegerFields)
+                {
+                    <th>@integer.FieldName</th>
+                }
+            </tr>
+            <tr>
+                @foreach (var date in Model.DateFields)
+                {
+                    <td>@date.Value</td>
+                }
 
-        @foreach (var boolean in Model.BoolFields)
-        {
-            var yesOrNo = boolean.Value == true ? "Yes" : "No";
-            <td>@yesOrNo</td>
-        }
+                @foreach (var boolean in Model.BoolFields)
+                {
+                    var yesOrNo = boolean.Value == true ? "Yes" : "No";
+                    <td>@yesOrNo</td>
+                }
 
-        @foreach (var integer in Model.IntegerFields)
-        {
-            <td>@integer.Value</td>
-        }
-    </tr>
-</table>
+                @foreach (var integer in Model.IntegerFields)
+                {
+                    <td>@integer.Value</td>
+                }
+            </tr>
+        </table>
+    </div>
+}
 
-<h3>Text fields of the item</h3>
-<div>
-    @foreach (var textField in Model.TextFields)
-    {
-        <div>
-            @textField.Value
-        </div>
-    }
-</div>
+@if (Model.TextFields.Count > 0)
+{
+    <h3 class="display-6 mt-3">Text fields of the item</h3>
+    <div>
+        @foreach (var textField in Model.TextFields)
+        {
+            <div class="col-9">
+                <div class="container border border-secondary rounded rounded-1 shadow-sm mb-3">
+                    <div class="row">
+                        <div class="col-2 py-1">
+                            <span class="fw-bold">@textField.FieldName</span>
+                        </div>
+                        <div class="col py-1 ps-4 pe-3">
+                            @textField.Value
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@if (authorizationResult.Succeeded)
+{
+    <div class="mt-4">
+        <a class="btn btn-primary shadow-sm" asp-controller="Collection" asp-action="GetCollection" asp-route-collectionId="@Model.CollectionId">Back to collection</a>
+        <form method="post" class="d-inline-block">
+            <button class="btn btn-danger shadow-sm mx-2" type="submit" asp-action="Delete" asp-route-itemId="@Model.ItemId">Delete</button>
+        </form>
+        <a class="btn btn-warning shadow-sm" asp-controller="Item" asp-action="Update" asp-route-itemId="@Model.ItemId">Change Item</a>
+    </div>
+}

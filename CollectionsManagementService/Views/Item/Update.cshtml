@@ -1,0 +1,81 @@
+﻿@using CollectionsManagementService.VievModels.Item
+@using DataORMLayer
+@model UpdateItemViewModel
+<h1 class="display-6">Update the item of your collection here.</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-6 px-0">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <form method="post">
+                <input type="hidden" asp-for="@Model.UserId" />
+                <input type="hidden" asp-for="@Model.ItemId" />
+                <input type="hidden" asp-for="@Model.CollectionId" />
+                <div class="form-control">
+                    <label class="fw-light fs-6">Change the item name:</label>
+                    <input asp-for="ItemName" class="form-control my-1" />
+
+                </div>
+                <div class="fw-light fs-5 mt-3 mb-2">Here you can change the values of the item's custom fields</div>
+                <div class="form-control mb-3 shadow-sm">
+                    @for (int i = 0, j = 1; i < Model.StringFields.Count; i++, j++)
+                    {
+                        <div class="mb-2">
+                            <label class="fw-light fs-6">
+                                (#@j) Change the '@Model.StringFields[i].FieldName' string
+                            </label>
+                            <input asp-for="StringFields[i].Value" class="form-control my-1" />
+                            <input type="hidden" asp-for="StringFields[i].ItemFieldId" />
+                        </div>
+                    }
+                </div>
+
+                @for (int i = 0, j = 1; i < Model.IntFields.Count; i++, j++)
+                {
+                    <div class="form-control mb-3 shadow-sm">
+                        <label class="fw-light fs-6">
+                            (#@j) Change the '@Model.IntFields[i].FieldName' number
+                        </label>
+                        <input asp-for="IntFields[i].Value" class="form-control my-1" />
+                        <input type="hidden" asp-for="IntFields[i].ItemFieldId" />
+                    </div>
+                }
+                <div class="form-control mb-3">
+                    @for (int i = 0, j = 1; i < Model.BoolFields.Count; i++, j++)
+                    {
+                        <div class="form-check">
+                            <input asp-for="BoolFields[i].Value" type="checkbox" class="form-check-input" />
+                            <label class="form-check-label fw-light fs-6">
+                                Change the '@Model.BoolFields[i].FieldName' value (#@j)
+                            </label>
+                            <input type="hidden" asp-for="BoolFields[i].ItemFieldId" />
+                        </div>
+                    }
+                </div>
+
+                @for (int i = 0, j = 1; i < Model.DateFields.Count; i++, j++)
+                {
+                    <div class="form-control mb-3">
+                        <label class="fw-light fs-6">
+                            (#@j) Change the '@Model.DateFields[i].FieldName' date:
+                        </label>
+                        <input asp-for="DateFields[i].Value" type="date" class="form-control" />
+                        <input type="hidden" asp-for="DateFields[i].ItemFieldId" />
+                    </div>
+                }
+                @for (int i = 0, j = 1; i < Model.TextFields.Count; i++, j++)
+                {
+                    <div class="mb-3 form-control">
+                        <label class="form-label fs-6 fw-light">
+                            (#@j) Change the '@Model.TextFields[i].FieldName' text
+                        </label>
+                        <textarea class="form-control shadow-sm" asp-for="TextFields[i].Value" 
+                            rows="4" required maxlength="@Constants.TextAndCommentSize"></textarea>
+                        <input type="hidden" asp-for="TextFields[i].ItemFieldId" />
+                    </div>
+                }
+
+                <button class="btn btn-success shadow-sm" type="submit">Apply changes</button>
+            </form>
+        </div>
+    </div>
+</div>

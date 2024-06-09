@@ -35,23 +35,23 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Item>()
             .HasMany(e => e.BooleanFields)
             .WithOne(e => e.Item)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.ClientCascade);
         builder.Entity<Item>()
             .HasMany(e => e.IntegerFields)
             .WithOne(e => e.Item)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.ClientCascade);
         builder.Entity<Item>()
             .HasMany(e => e.TextFields)
             .WithOne(e => e.Item)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.ClientCascade);
         builder.Entity<Item>()
             .HasMany(e => e.StringFields)
             .WithOne(e => e.Item)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.ClientCascade);
         builder.Entity<Item>()
             .HasMany(e => e.DateFields)
             .WithOne(e => e.Item)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.ClientCascade);
         builder.Entity<ApplicationUser>()
             .HasMany(e => e.UserComments)
             .WithOne(e => e.User)

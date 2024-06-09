@@ -1,54 +1,58 @@
-﻿@model CollectionsManagementService.VievModels.Collection.UpdateCollectionViewModel
-<h1>Update the @Model.Name collection</h1>
-<p>On this page you can change the name or the description of the collection.</p>
+﻿@using DataORMLayer
+@model CollectionsManagementService.VievModels.Collection.UpdateCollectionViewModel
+@{
+    ViewData["Title"] = $"Update the '{@Model.CollectionName}' collection";
+}
 
+<h1 class="display-6">Update the @Model.CollectionName collection</h1>
+<div class="lead fs-4">On this page you can change the name, the description and field labels of your collection.</div>
 <div class="container">
     <div class="row">
-        <div class="col-9">
+        <div class="col-6 ps-0">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <form method="post" enctype="multipart/form-data">
-                <div class="form-control">
-                    <div class="my-2">
-                        <label class="form-label" asp-for="Name">Change collection name:</label>
-                        <input class="form-control" asp-for="Name" />
-                        <span asp-validation-for="Name"></span>
+                <div class="form-control shadow-sm">
+                    <div class="mb-3">
+                        <label class="form-label fw-light" asp-for="CollectionName">Change collection name:</label>
+                        <input class="form-control shadow-sm" asp-for="CollectionName" />
+                        <span asp-validation-for="CollectionName" class="text-danger"></span>
                     </div>
-                    <div class="my-2">
-                        <label class="form-label" asp-for="Description">Change collection description:</label>
-                        <input class="form-control" asp-for="Description" />
-                        <span asp-validation-for="Description"></span>
+                    <div class="mb-3">
+                        <label class="form-label fw-light" asp-for="Description">Change collection description:</label>
+                        <textarea rows="3" class="form-control shadow-sm" type="text"
+                                  required maxlength="@Constants.DescriptionSize" asp-for="Description"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
-                    <div class="form-control my-3">
+                    <div class="my-3">
                         @if (Model.ImageUrl != null)
                         {
-                            <div class="col-3">
+                            <div class="col-5">
                                 <div class="img-thumbnail">
-                                    <img src="@Model.ImageUrl" alt="The image of the @Model.Name collection" class="img-fluid" />
+                                    <img src="@Model.ImageUrl" alt="The image of the @Model.CollectionName collection" class="img-fluid" />
                                 </div>
                             </div>
-                            <div class="">
-                                <p>You can change the image of your collection.</p>
-                            </div>
+                            <div class="fw-light mt-2">You can change the image of your collection.</div>
                         }
                         else
                         {
-                            <div class="">
-                                <p>There is no an image for your collecion. You can add a new one.<br /></p>
+                            <div class="lead fs-5 mb-1">
+                                There is no an image for your collecion. You can add a new one.
                             </div>
                         }
-                        <div class="">
-                            <label class="form-label">Click the button and choose an image for your collection.</label>
-                            <input asp-for="Image" class="form-label" type="file" />
+
+                        <div class="form-control">
+                            <label class="form-label fw-light">Click the button and choose an image for your collection.</label>
+                            <input asp-for="Image" class="form-label" accept="image/jpg, image/jpeg, image/png, image/svg" type="file" />
                         </div>
                         <input asp-for="ImageUrl" type="hidden" />
                     </div>
-                    <h3>Update the custom fields of the collection</h3>
-                    <p>You can also change names of the custom fields in your collection.</p>
+                    <h3 class="fw-light fs-5">You can change names of the custom fields in your collection.</h3>
                     <div class="form-control my-3">
                         @for (int i = 0, j = 1; i < Model.CollectionFields.Count; i++, j++)
                         {
-                            <div class="form-group">
-                                <label asp-for="CollectionFields[i].FieldName">Field #@j @Model.CollectionFields[i].FieldTypeName Field:</label>
-                                <input class="form-control" asp-for="CollectionFields[i].FieldName" />
+                            <div class="form-group mb-2">
+                                <label class="form-label fw-light mb-0" asp-for="CollectionFields[i].FieldName">Field #@j @Model.CollectionFields[i].FieldTypeName Field:</label>
+                                <input class="form-control shadow-sm" asp-for="CollectionFields[i].FieldName" />
                                 <input type="hidden" asp-for="CollectionFields[i].FieldId" />
                             </div>
                         }
@@ -59,4 +63,3 @@
         </div>
     </div>
 </div>
-

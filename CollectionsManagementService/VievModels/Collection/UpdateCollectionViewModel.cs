@@ -1,13 +1,20 @@
-﻿namespace CollectionsManagementService.VievModels.Collection;
+﻿using DataORMLayer;
+using System.ComponentModel.DataAnnotations;
 
-public class UpdateCollectionViewModel
+namespace CollectionsManagementService.VievModels.Collection;
+
+public class UpdateCollectionViewModel : ICollectionNameContains
 {
     public Guid CollectionId { get; set; }
-    public string Name { get; set; }
+    [Required]
+    [MaxLength(Constants.NameSize)]
+    public string CollectionName { get; set; }
+    [Required]
+    [MaxLength(Constants.DescriptionSize)]
     public string Description { get; set; }
     //public int CategoryId { get; set; }
     // TODO: add category update
-    public IFormFile Image { get; set; }
+    public IFormFile? Image { get; set; }
     public string? ImageUrl { get; set; }
     public List<CollectionFieldViewModel> CollectionFields { get; set; }
 }

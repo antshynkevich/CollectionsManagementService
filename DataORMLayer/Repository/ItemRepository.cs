@@ -19,9 +19,32 @@ public class ItemRepository : IItemRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<Collection> GetCollectionDataByItemIdAsync(Guid itemId)
+    {
+        var item = await _context.Items
+            .AsNoTracking()
+            .Include(x => x.Collection)
+            .FirstOrDefaultAsync(x => x.ItemId == itemId);
+
+        if (item == null) 
+            throw new ArgumentException("The collection was not found by Id", nameof(itemId));
+
+        return item.Collection;
+    }
+
     public async Task DeleteItemAsync(Guid itemId)
     {
-        throw new NotImplementedException();
+        var item = await _context.Items
+            .Include(i => i.DateFields)
+            .Include(i => i.BooleanFields)
+            .Include(i => i.IntegerFields)
+            .Include(i => i.TextFields)
+            .Include(i => i.StringFields)
+            .FirstOrDefaultAsync(x => x.ItemId == itemId);
+        if (item == null)
+            throw new ArgumentException("The collection was not found by Id", nameof(itemId));
+        _context.Items.Remove(item);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<Item?> GetByIdAsync(Guid itemId)
@@ -112,6 +135,54 @@ public class ItemRepository : IItemRepository
 
     public async Task UpdateItemAsync(Item item)
     {
-        throw new NotImplementedException();
+        var oldItem = await _context.Items
+            .Include(i => i.DateFields)
+            .Include(i => i.BooleanFields)
+            .Include(i => i.TextFields)
+            .Include(i => i.StringFields)
+            .Include(i => i.IntegerFields)
+            .FirstOrDefaultAsync(i => i.ItemId == item.ItemId);
+
+        if (oldItem == null)
+            throw new ArgumentException("The item was not found by Id", nameof(item));
+        
+        oldItem.Name = item.Name;
+
+        foreach (var field in item.DateFields)
+        {
+            var oldField = oldItem.DateFields.FirstOrDefault(x => x.DateFieldId == field.DateFieldId);
+            if (oldField != null)
+                oldField.Value = field.Value;
+        }
+
+        foreach (var field in item.StringFields)
+        {
+            var oldField = oldItem.StringFields.FirstOrDefault(x => x.StringFieldId == field.StringFieldId);
+            if (oldField != null)
+                oldField.Value = field.Value;
+        }
+
+        foreach (var field in item.TextFields)
+        {
+            var oldField = oldItem.TextFields.FirstOrDefault(x => x.TextFieldId == field.TextFieldId);
+            if (oldField != null)
+                oldField.Value = field.Value;
+        }
+
+        foreach (var field in item.IntegerFields)
+        {
+            var oldField = oldItem.IntegerFields.FirstOrDefault(x => x.IntegerFieldId == field.IntegerFieldId);
+            if (oldField != null)
+                oldField.Value = field.Value;
+        }
+
+        foreach (var field in item.BooleanFields)
+        {
+            var oldField = oldItem.BooleanFields.FirstOrDefault(x => x.BooleanFieldId == field.BooleanFieldId);
+            if (oldField != null)
+                oldField.Value = field.Value;
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

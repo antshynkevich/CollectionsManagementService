@@ -18,18 +18,21 @@ public class CollectionController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICollectionMapper _collectionMapper;
     private readonly ICloudService _cloudService;
+    private readonly IAuthorizationService _authorizationService;
 
     public CollectionController(ICollectionRepository collectionRepository,
         UserManager<ApplicationUser> userManager,
         ICollectionMapper collectionMapper,
         CategoryRepository categoryRepository,
-        ICloudService cloudService)
+        ICloudService cloudService, 
+        IAuthorizationService authorizationService)
     {
         _collectionRepository = collectionRepository;
         _userManager = userManager;
         _collectionMapper = collectionMapper;
         _categoryRepository = categoryRepository;
         _cloudService = cloudService;
+        _authorizationService = authorizationService;
     }
 
     [AllowAnonymous]
@@ -53,7 +56,10 @@ public class CollectionController : Controller
     [HttpGet]
     public async Task<IActionResult> GetCollection(string collectionId)
     {
-        var collection = await _collectionRepository.GetWithItemsByIdAsync(Guid.Parse(collectionId));
+        bool isValid = Guid.TryParse(collectionId, out Guid guidCollectionId);
+        if (!isValid) return NotFound();
+
+        var collection = await _collectionRepository.GetWithItemsByIdAsync(guidCollectionId);
         if (collection == null)
         {
             return NotFound();
@@ -84,6 +90,11 @@ public class CollectionController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(CreateCollectionViewModel viewModel)
     {
+        if (ModelState["CategoryId"]?.Errors.Count > 0)
+        {
+            return View(viewModel);
+        }
+
         if (viewModel.Image != null)
         {
             var result = await _cloudService.AddImageAsync(viewModel.Image);
@@ -99,12 +110,21 @@ public class CollectionController : Controller
     [HttpGet("/[controller]/update/{collectionId}")]
     public async Task<IActionResult> UpdateCollection(string collectionId)
     {
-        var collection = await _collectionRepository.GetCollectionByIdAsync(Guid.Parse(collectionId));
+        bool isValid = Guid.TryParse(collectionId, out Guid guidCollectionId);
+        if (!isValid) return NotFound();
+
+        var collection = await _collectionRepository.GetCollectionByIdAsync(guidCollectionId);
         if (collection == null)
         {
             return NotFound();
             //TODO: throw not found
         }
+
+        var authorizationResult = await _authorizationService
+            .AuthorizeAsync(User, collection, "CollectionOwnerOrAdminPolicy");
+
+        if (!authorizationResult.Succeeded)
+            return new ForbidResult();
 
         var collectoinVM = _collectionMapper.MapToUpdateCollectionVM(collection);
         return View(collectoinVM);
@@ -125,16 +145,24 @@ public class CollectionController : Controller
         }
 
         var collectionUpdated = _collectionMapper.MapToCollection(collectionViewModel);
+        // TODO: add try catch
         await _collectionRepository.UpdateCollectionAsync(collectionUpdated);
         return RedirectToAction(nameof(GetCollection), new { collectionId = collectionViewModel.CollectionId });
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> DeleteCollection(string collectionId)
     {
+        bool isValid = Guid.TryParse(collectionId, out Guid guidCollectionId);
+        if (!isValid) return NotFound();
+        var authorizationResult = await _authorizationService
+            .AuthorizeAsync(User, new Collection() { UserId = collectionId }, "CollectionOwnerOrAdminPolicy");
+        if (!authorizationResult.Succeeded)
+            return new ForbidResult();
+
         try
         {
-            await _collectionRepository.DeleteCollectionAsync(Guid.Parse(collectionId));
+            await _collectionRepository.DeleteCollectionAsync(guidCollectionId);
         }
         catch (Exception)
         {

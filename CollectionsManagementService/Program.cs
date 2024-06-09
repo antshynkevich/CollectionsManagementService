@@ -7,9 +7,16 @@ using CollectionsManagementService.Services;
 using CollectionsManagementService.Services.Interfaces;
 using CloudinaryDotNet;
 using CollectionsManagementService;
+using CollectionsManagementService.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using DotNetEnv.Configuration;
+using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Configuration.AddDotNetEnv(".env", LoadOptions.TraversePath());
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -28,6 +35,23 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireLowercase = false;
 }).AddEntityFrameworkStores<AppDbContext>();
 
+byte[] key = Encoding.UTF8.GetBytes(Env.GetString("tokensecretkey"));
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true
+    };
+});
+
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("AdminsOnly", policy => {
         policy.RequireClaim("role", "admin");
@@ -37,6 +61,8 @@ builder.Services.AddAuthorization(options => {
         policy.RequireAuthenticatedUser();
         policy.RequireAssertion(context => !context.User.HasClaim(c => c.Type == "blocked" || c.Value == "blocked"));
     });
+    options.AddPolicy("CollectionOwnerOrAdminPolicy", policy =>
+        policy.Requirements.Add(new MustBeCollectionOwnerOrAdminRequirement()));
 });
 
 builder.Services.AddSingleton<ICollectionMapper, CollectionMapper>();
@@ -45,8 +71,10 @@ builder.Services.AddScoped<ICollectionRepository, CollectionRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<ICloudService, CloudService>();
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddSingleton<IAuthorizationHandler, IsOwnerOrAdminHandler>();
+builder.Services.AddScoped<JiraService>();
 
-var cloudinary = new Cloudinary("cloudinary://267417229445433:t2vEgh1RxVe9lqlV7HMqbPmQV1U@dedob71th");
+var cloudinary = new Cloudinary(Env.GetString("CloudinaryLink"));
 builder.Services.AddSingleton(cloudinary);
 
 var app = builder.Build();
